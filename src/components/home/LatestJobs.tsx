@@ -1,118 +1,165 @@
-import { Button } from "@/components/ui/button";
-import { MapPin, Briefcase } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { ArrowRight } from "lucide-react";
 
-export default function LatestJobs() {
-  const jobs = [
-    {
-      id: 1,
-      title: "Senior Frontend Developer",
-      company: "Stripe",
-      location: "San Francisco, CA",
-      type: "Full Time",
-      logo: "S",
-      logoColor: "bg-green-100",
-      logoTextColor: "text-green-600",
-      level: "Senior",
-    },
-    {
-      id: 2,
-      title: "UX/UI Designer",
-      company: "Figma",
-      location: "Remote",
-      type: "Full Time",
-      logo: "F",
-      logoColor: "bg-purple-100",
-      logoTextColor: "text-purple-600",
-      level: "Mid-level",
-    },
-    {
-      id: 3,
-      title: "Backend Engineer",
-      company: "Notion",
-      location: "San Francisco, CA",
-      type: "Full Time",
-      logo: "N",
-      logoColor: "bg-gray-200",
-      logoTextColor: "text-gray-700",
-      level: "Senior",
-    },
-    {
-      id: 4,
-      title: "Product Designer",
-      company: "Slack",
-      location: "Remote",
-      type: "Full Time",
-      logo: "Sl",
-      logoColor: "bg-blue-100",
-      logoTextColor: "text-blue-600",
-      level: "Mid-level",
-    },
-  ];
+interface JobListing {
+  id: string;
+  title: string;
+  company: string;
+  location: string;
+  tags: string[];
+  icon: React.ReactNode;
+}
 
+const jobListings: JobListing[] = [
+  {
+    id: "1",
+    title: "Social Media Assistant",
+    company: "Nomad",
+    location: "Paris, France",
+    tags: ["Full-Time", "Marketing", "Design"],
+    icon: (
+      <div className="w-10 h-10 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-lg flex items-center justify-center text-white font-bold">
+        P
+      </div>
+    ),
+  },
+  {
+    id: "2",
+    title: "Social Media Assistant",
+    company: "Netlify",
+    location: "Paris, France",
+    tags: ["Full-Time", "Marketing", "Design"],
+    icon: (
+      <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 to-cyan-600 rounded-lg flex items-center justify-center text-white font-bold">
+        N
+      </div>
+    ),
+  },
+  {
+    id: "3",
+    title: "Brand Designer",
+    company: "Dropbox",
+    location: "San Francisco, USA",
+    tags: ["Full-Time", "Marketing", "Design"],
+    icon: (
+      <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center text-white font-bold">
+        D
+      </div>
+    ),
+  },
+  {
+    id: "4",
+    title: "Brand Designer",
+    company: "Maze",
+    location: "San Francisco, USA",
+    tags: ["Full-Time", "Marketing", "Design"],
+    icon: (
+      <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg flex items-center justify-center text-white font-bold">
+        M
+      </div>
+    ),
+  },
+  {
+    id: "5",
+    title: "Interactive Developer",
+    company: "Terraform",
+    location: "Hamburg, Germany",
+    tags: ["Full-Time", "Marketing", "Design"],
+    icon: (
+      <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 to-cyan-600 rounded-lg flex items-center justify-center text-white font-bold">
+        T
+      </div>
+    ),
+  },
+  {
+    id: "6",
+    title: "Interactive Developer",
+    company: "Udacity",
+    location: "Hamburg, Germany",
+    tags: ["Full-Time", "Marketing", "Design"],
+    icon: (
+      <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 to-cyan-600 rounded-lg flex items-center justify-center text-white font-bold">
+        U
+      </div>
+    ),
+  },
+  {
+    id: "7",
+    title: "HR Manager",
+    company: "Packer",
+    location: "Lucern, Switzerland",
+    tags: ["Full-Time", "Marketing", "Design"],
+    icon: (
+      <div className="w-10 h-10 bg-gradient-to-br from-red-400 to-red-600 rounded-lg flex items-center justify-center text-white font-bold">
+        P
+      </div>
+    ),
+  },
+  {
+    id: "8",
+    title: "HR Manager",
+    company: "Webflow",
+    location: "Lucern, Switzerland",
+    tags: ["Full-Time", "Marketing", "Design"],
+    icon: (
+      <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center text-white font-bold">
+        W
+      </div>
+    ),
+  },
+];
+
+export default function LatestJobsOpen() {
   return (
-    <section className="bg-white py-20">
-      <div className="container max-w-7xl mx-auto px-6">
+    <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+      <div className="max-w-7xl mx-auto">
+        {/* Header Section */}
         <div className="flex items-center justify-between mb-12">
           <div>
-            <h2 className="text-4xl font-bold text-gray-900 mb-2">Latest <span className="text-blue-500">jobs open</span></h2>
-            <p className="text-gray-600 text-sm font-medium">Explore the most recent job postings</p>
+            <h2 className="text-4xl font-bold text-slate-900">
+              Latest <span className="text-blue-500">jobs open</span>
+            </h2>
           </div>
-          <Button variant="outline" className="hidden md:inline-flex text-sm font-semibold border-gray-300 text-gray-700">
-            View all →
-          </Button>
+          <button className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors">
+            <span className="text-sm font-medium">Show all jobs</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {jobs.map((job) => (
+        {/* Jobs Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {jobListings.map((job) => (
             <div
               key={job.id}
-              className="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-xl hover:border-gray-300 transition group"
+              className="flex gap-4 p-6 rounded-lg border border-slate-200 hover:border-slate-300 hover:shadow-md transition-all duration-200 bg-white"
             >
-              <div className="flex items-start gap-4">
-                <div className={`w-16 h-16 rounded-xl ${job.logoColor} flex items-center justify-center flex-shrink-0`}>
-                  <span className={`font-bold text-sm ${job.logoTextColor}`}>{job.logo}</span>
-                </div>
+              {/* Icon */}
+              <div className="flex-shrink-0">{job.icon}</div>
 
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between gap-2 mb-2">
-                    <div>
-                      <h3 className="font-bold text-gray-900 group-hover:text-blue-600 transition text-sm">
-                        {job.title}
-                      </h3>
-                      <p className="text-xs text-gray-600 font-medium">{job.company}</p>
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-gray-400 hover:text-red-500 text-lg flex-shrink-0"
+              {/* Content */}
+              <div className="flex-1 min-w-0">
+                <h3 className="text-base font-semibold text-slate-900 mb-1">
+                  {job.title}
+                </h3>
+                <p className="text-sm text-slate-600 mb-3">
+                  {job.company} • {job.location}
+                </p>
+
+                {/* Tags */}
+                <div className="flex flex-wrap gap-2">
+                  {job.tags.map((tag, index) => (
+                    <Badge
+                      key={index}
+                      variant={index === 0 ? "secondary" : "outline"}
+                      className={`text-xs font-medium ${
+                        index === 0
+                          ? "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100"
+                          : "bg-white text-slate-700 border-slate-300 hover:bg-slate-50"
+                      }`}
                     >
-                      ♡
-                    </Button>
-                  </div>
-
-                  <div className="flex items-center gap-4 text-xs text-gray-600 font-medium mb-3">
-                    <div className="flex items-center gap-1">
-                      <MapPin className="w-4 h-4" />
-                      {job.location}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Briefcase className="w-4 h-4" />
-                      {job.level}
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs bg-blue-50 text-blue-600 px-3 py-1.5 rounded-full font-bold">
-                      {job.type}
-                    </span>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-blue-600 hover:text-blue-700 font-bold text-xs"
-                    >
-                      Apply Now →
-                    </Button>
-                  </div>
+                      {tag}
+                    </Badge>
+                  ))}
                 </div>
               </div>
             </div>

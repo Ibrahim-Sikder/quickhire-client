@@ -15,7 +15,8 @@ export default function Footer() {
               <span className="font-bold text-lg text-white">QuickHire</span>
             </div>
             <p className="text-xs text-gray-400 font-medium leading-relaxed">
-              The best platform for job seekers to find their next opportunity.
+              Great platform for the job seeker that passionate about startups.
+              Find your dream job easier.
             </p>
           </div>
 
@@ -55,6 +56,14 @@ export default function Footer() {
                   Advice
                 </a>
               </li>
+              <li>
+                <a
+                  href="#"
+                  className="text-gray-400 hover:text-white transition font-medium"
+                >
+                  Privacy Policy
+                </a>
+              </li>
             </ul>
           </div>
 
@@ -67,7 +76,7 @@ export default function Footer() {
                   href="#"
                   className="text-gray-400 hover:text-white transition font-medium"
                 >
-                  Help Center
+                  Help Docs
                 </a>
               </li>
               <li>
@@ -75,7 +84,7 @@ export default function Footer() {
                   href="#"
                   className="text-gray-400 hover:text-white transition font-medium"
                 >
-                  Support Community
+                  Guide
                 </a>
               </li>
               <li>
@@ -83,7 +92,7 @@ export default function Footer() {
                   href="#"
                   className="text-gray-400 hover:text-white transition font-medium"
                 >
-                  Security
+                  Updates
                 </a>
               </li>
               <li>
@@ -91,7 +100,7 @@ export default function Footer() {
                   href="#"
                   className="text-gray-400 hover:text-white transition font-medium"
                 >
-                  Blog
+                  Contact Us
                 </a>
               </li>
             </ul>
@@ -99,9 +108,11 @@ export default function Footer() {
 
           {/* Newsletter */}
           <div className="space-y-4">
-            <h4 className="font-bold text-white text-sm">Get job alerts</h4>
+            <h4 className="font-bold text-white text-sm">
+              Get job notification{" "}
+            </h4>
             <p className="text-xs text-gray-400 font-medium leading-relaxed">
-              New jobs posted daily. Get alerts straight to your inbox.
+              The latest job news, articles, sent to your inbox weekly.
             </p>
             <div className="flex gap-2">
               <input
@@ -109,7 +120,7 @@ export default function Footer() {
                 placeholder="Your email"
                 className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 font-medium"
               />
-              <Button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-bold text-xs">
+              <Button className="bg-[#4640DE] hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-bold text-xs">
                 Subscribe
               </Button>
             </div>
