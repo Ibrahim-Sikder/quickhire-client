@@ -58,10 +58,14 @@ export default function FeaturedJobs() {
       <div className="container max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between mb-12">
           <div>
-            <h2 className="text-4xl font-bold text-gray-900 mb-2">Featured <span className="text-blue-500">jobs</span></h2>
-            <p className="text-gray-600 text-sm font-medium">Discover your next opportunity among our featured listings</p>
+            <h2 className="text-xl md:text-5xl font-bold text-gray-900 mb-2">
+              Featured <span className="text-[#26A4FF]">jobs</span>
+            </h2>
           </div>
-          <Button variant="outline" className="hidden md:inline-flex text-sm font-semibold border-gray-300 text-gray-700">
+          <Button
+            variant="outline"
+            className="hidden md:inline-flex text-sm font-semibold border-gray-300 text-gray-700"
+          >
             View all →
           </Button>
         </div>
@@ -74,14 +78,20 @@ export default function FeaturedJobs() {
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-4">
-                  <div className={`w-14 h-14 rounded-lg ${job.logoColor} flex items-center justify-center`}>
-                    <span className={`font-bold text-sm ${job.logoTextColor}`}>{job.logo}</span>
+                  <div
+                    className={`w-14 h-14 rounded-lg ${job.logoColor} flex items-center justify-center`}
+                  >
+                    <span className={`font-bold text-sm ${job.logoTextColor}`}>
+                      {job.logo}
+                    </span>
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 group-hover:text-blue-600 transition text-sm">
                       {job.title}
                     </h3>
-                    <p className="text-xs text-gray-600 font-medium">{job.company}</p>
+                    <p className="text-xs text-gray-600 font-medium">
+                      {job.company}
+                    </p>
                   </div>
                 </div>
                 <Button
@@ -115,7 +125,9 @@ export default function FeaturedJobs() {
                     </span>
                   ))}
                 </div>
-                <span className="font-bold text-gray-900 text-xs">{job.salary}</span>
+                <span className="font-bold text-gray-900 text-xs">
+                  {job.salary}
+                </span>
               </div>
             </div>
           ))}
