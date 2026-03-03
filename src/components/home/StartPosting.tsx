@@ -5,19 +5,18 @@ import Image from "next/image";
 
 export default function StartPosting() {
   return (
-    <section className="py-20 bg-white">
-      <div className="container max-w-7xl mx-auto px-6">
+    <section className="">
+      <div className="container max-w-7xl mx-auto ">
         <div
-          className="relative rounded-3xl overflow-hidden px-12 py-16 lg:px-20 lg:py-20"
+          className="relative  overflow-hidden w-full startPosting px-8 py-14 "
           style={{
             backgroundImage: `url(${bg.src})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            width: "100%",
           }}
         >
-          {/* Optional overlay for better contrast */}
-          <div className="absolute inset-0 bg-gradient-to-r from-indigo-700/90 to-blue-600/90"></div>
-
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 items-center gap-12">
             {/* LEFT CONTENT */}
             <div className="text-white max-w-xl space-y-6">
@@ -37,7 +36,7 @@ export default function StartPosting() {
             </div>
 
             {/* RIGHT IMAGE */}
-            <div className="relative flex justify-center lg:justify-end">
+            <div className="absolute right-5 z-10 top-5 flex justify-center lg:justify-end">
               <Image
                 src={content}
                 alt="Dashboard Preview"
