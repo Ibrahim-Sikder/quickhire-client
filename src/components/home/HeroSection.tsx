@@ -1,3 +1,6 @@
+import hero from "@/assets/hero/hero.png";
+import group from "@/assets/Group.png";
+import Image from "next/image";
 export default function HeroSection() {
   return (
     <section className="bg-white pt-16 pb-24 overflow-hidden">
@@ -15,6 +18,7 @@ export default function HeroSection() {
                   5000+ Jobs
                 </span>
               </h1>
+              <Image src={group} width={500} height={500} alt="hero" />
               <p className="text-gray-600 text-base leading-relaxed max-w-md font-medium">
                 Great platform for the job seeker that searching for new
                 opportunities in the tech industry.
@@ -69,36 +73,7 @@ export default function HeroSection() {
 
           {/* Right Image */}
           <div className="relative flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-sm">
-              {/* Professional photo placeholder */}
-              <div className="relative bg-gradient-to-br from-purple-100 to-indigo-100 rounded-3xl h-96 flex items-center justify-center border-4 border-purple-300 overflow-hidden">
-                <div className="text-center">
-                  <div className="w-40 h-40 bg-gradient-to-br from-purple-400 to-indigo-400 rounded-full mx-auto mb-6 flex items-center justify-center">
-                    <span className="text-6xl">👨</span>
-                  </div>
-                  <p className="text-gray-700 text-sm font-semibold">
-                    Professional Photo
-                  </p>
-                </div>
-              </div>
-
-              {/* Floating card - Applications sent */}
-              <div className="absolute -bottom-8 -right-8 bg-white rounded-xl shadow-2xl p-4 max-w-xs border border-gray-100">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">
-                    ✓
-                  </div>
-                  <div>
-                    <p className="font-bold text-gray-900 text-sm">
-                      Applications sent
-                    </p>
-                    <p className="text-gray-500 text-xs font-medium">
-                      24 job positions
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <Image src={hero} width={500} height={500} alt="hero" />
           </div>
         </div>
       </div>
