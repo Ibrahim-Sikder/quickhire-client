@@ -4,9 +4,12 @@ import Image from "next/image";
 import JobSearch from "./JobSearch";
 import { getJobs } from "@/lib/getJobs";
 
-export default async function HeroSection() {
-  const jobData = await getJobs();
-  console.log("job data this ", jobData);
+export default async function Page({
+  searchParams,
+}: {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) {
+  const jobs = await getJobs();
   return (
     <section className=" bg-[#F8F8FD] pt-5 overflow-hidden relative hero-right-clip">
       <div className="container mx-auto  px-6">
@@ -29,7 +32,7 @@ export default async function HeroSection() {
                 opportunities in the tech industry.
               </p>
             </div>
-            <JobSearch />
+            <JobSearch initialJobs={jobs} searchParams={searchParams} />
             {/* Popular Tags */}
             <div className="flex items-center gap-3 flex-wrap">
               <span className="text-xs font-semibold text-gray-600">

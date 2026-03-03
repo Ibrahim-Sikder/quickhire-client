@@ -12,3 +12,34 @@ export interface JobListing {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface Job {
+  _id: string;
+  title: string;
+  company: string;
+  location: string;
+  category: string;
+  description: string;
+  tags: string[];
+  featured: boolean;
+  latest: boolean;
+  createdAt: string;
+  updatedAt: string;
+  salary?: string;
+  experience?: string;
+  jobType?: string;
+}
+
+export interface ApplyFormData {
+  name: string;
+  email: string;
+  resume: string;
+  coverNote: string;
+}
+
+export interface JobFilters {
+  search: string;
+  location: string;
+  category: string;
+  jobType: string;
+}
