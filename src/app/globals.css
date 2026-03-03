@@ -123,3 +123,13 @@
     @apply bg-background text-foreground;
   }
 }
+@layer utilities {
+  .hero-right-clip {
+    clip-path: polygon(
+      20% 0,
+      100% 0,
+      100% 100%,
+      0% 100%
+    );
+  }
+}
