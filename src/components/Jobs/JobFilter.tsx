@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
@@ -17,16 +18,30 @@ export default function JobFilters({ categories, locations }: JobFiltersProps) {
 
   const updateFilter = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
+
+    // Preserve existing search term if it exists
+    const currentSearch = searchParams.get("search");
+    if (currentSearch) {
+      params.set("search", currentSearch);
+    }
+
     if (value && value !== "all") {
       params.set(key, value);
     } else {
       params.delete(key);
     }
+
     router.push(`/jobs?${params.toString()}`);
   };
 
   const clearFilters = () => {
-    router.push("/jobs");
+    // Preserve search term if it exists
+    const params = new URLSearchParams();
+    const currentSearch = searchParams.get("search");
+    if (currentSearch) {
+      params.set("search", currentSearch);
+    }
+    router.push(`/jobs?${params.toString()}`);
   };
 
   const FilterContent = () => (
@@ -97,32 +112,8 @@ export default function JobFilters({ categories, locations }: JobFiltersProps) {
         </div>
       </div>
 
-      <div>
-        <h3 className="font-semibold text-gray-700 mb-3">Job Type</h3>
-        <div className="space-y-2">
-          {["Full Time", "Part Time", "Remote", "Contract", "Internship"].map(
-            (type) => (
-              <label
-                key={type}
-                className="flex items-center gap-2 cursor-pointer"
-              >
-                <input
-                  type="radio"
-                  name="jobType"
-                  value={type}
-                  checked={searchParams.get("jobType") === type}
-                  onChange={() => updateFilter("jobType", type)}
-                  className="text-indigo-600"
-                />
-                <span className="text-gray-600">{type}</span>
-              </label>
-            ),
-          )}
-        </div>
-      </div>
-
       <Button onClick={clearFilters} variant="outline" className="w-full">
-        Clear All Filters
+        Clear Filters
       </Button>
     </div>
   );

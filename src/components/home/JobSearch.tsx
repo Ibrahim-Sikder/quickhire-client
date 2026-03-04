@@ -41,7 +41,7 @@ export default function JobSearch({
   // Get unique locations from initialJobs
   const locations = [...new Set(initialJobs.map((job: Job) => job.location))];
 
-  // Filter jobs based on search term
+  // Filter jobs based on search term for suggestions
   useEffect(() => {
     if (searchTerm.trim().length > 0) {
       setIsLoading(true);
@@ -82,19 +82,29 @@ export default function JobSearch({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Handle search
+  // Handle search - redirect to jobs page with search params
   const handleSearch = () => {
     const params = new URLSearchParams();
-    if (searchTerm) params.set("search", searchTerm);
-    if (location && location !== "all") params.set("location", location);
+    if (searchTerm.trim()) {
+      params.set("search", searchTerm.trim());
+    }
+    if (location && location !== "all") {
+      params.set("location", location);
+    }
     router.push(`/jobs?${params.toString()}`);
     setShowSuggestions(false);
   };
 
-  // Handle suggestion click
+  // Handle suggestion click - set search term and redirect
   const handleSuggestionClick = (job: Job) => {
     setSearchTerm(job.title);
     setShowSuggestions(false);
+    const params = new URLSearchParams();
+    params.set("search", job.title);
+    if (location && location !== "all") {
+      params.set("location", location);
+    }
+    router.push(`/jobs?${params.toString()}`);
   };
 
   // Clear search

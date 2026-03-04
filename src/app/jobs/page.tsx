@@ -1,56 +1,138 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
+
+import { useState, useEffect } from "react";
 import JobSearch from "@/components/home/JobSearch";
 import JobCard from "@/components/Jobs/JobCard";
 import JobFilters from "@/components/Jobs/JobFilter";
-import { getJobs } from "@/lib/getJobs";
 import { Job } from "@/types/job";
+import { useSearchParams } from "next/navigation";
 
-export default async function JobsPage({
-  searchParams,
-}: {
-  searchParams?: { [key: string]: string | string[] | undefined };
-}) {
-  const jobs = await getJobs();
+export default function JobsPage() {
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [locations, setLocations] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+  console.log("search params this", searchParams);
+  // Fetch jobs on component mount
+  useEffect(() => {
+    const fetchJobs = async () => {
+      const category = searchParams.get("category");
 
-  // Get unique categories and locations for filters
-  const categories = [...new Set(jobs.map((job: Job) => job.category))];
-  const locations = [...new Set(jobs.map((job: Job) => job.location))];
+      const queryString = category
+        ? `category=${encodeURIComponent(category)}`
+        : "";
+      try {
+        setLoading(true);
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/jobs/${queryString}`,
+          {
+            cache: "no-store",
+          },
+        );
 
-  // Filter jobs based on search params
-  const filteredJobs = jobs.filter((job: Job) => {
-    const searchTerm = searchParams?.search?.toString().toLowerCase() || "";
-    const locationFilter = searchParams?.location?.toString() || "";
-    const categoryFilter = searchParams?.category?.toString() || "";
-    const jobTypeFilter = searchParams?.jobType?.toString() || "";
+        if (!res.ok) {
+          throw new Error("Failed to fetch jobs");
+        }
 
-    const matchesSearch =
-      !searchTerm ||
-      job.title.toLowerCase().includes(searchTerm) ||
-      job.company.toLowerCase().includes(searchTerm) ||
-      job.tags.some((tag) => tag.toLowerCase().includes(searchTerm)) ||
-      job.category.toLowerCase().includes(searchTerm);
+        const data = await res.json();
+        const jobsData = data?.data?.jobs ?? [];
 
-    const matchesLocation =
-      !locationFilter ||
-      locationFilter === "all" ||
-      job.location === locationFilter;
-    const matchesCategory =
-      !categoryFilter ||
-      categoryFilter === "all" ||
-      job.category === categoryFilter;
-    const matchesJobType =
-      !jobTypeFilter ||
-      jobTypeFilter === "all" ||
-      job.jobType === jobTypeFilter;
+        setJobs(jobsData);
 
+        // Extract unique categories and locations for filters
+        const uniqueCategories = [
+          ...new Set(jobsData.map((job: Job) => job.category)),
+        ];
+        const uniqueLocations = [
+          ...new Set(jobsData.map((job: Job) => job.location)),
+        ];
+
+        setCategories(uniqueCategories);
+        setLocations(uniqueLocations);
+
+        setError(null);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to fetch jobs");
+        console.error("Error fetching jobs:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchJobs();
+  }, []); // Empty dependency array means this runs once on mount
+
+  // Filter jobs based on searchParams
+  useEffect(() => {
+    if (!jobs.length) return;
+
+    let filtered = [...jobs];
+
+    // Filter by search term
+    if (searchParams?.search) {
+      const searchTerm = searchParams.search.toString().toLowerCase();
+      filtered = filtered.filter(
+        (job) =>
+          job.title?.toLowerCase().includes(searchTerm) ||
+          job.description?.toLowerCase().includes(searchTerm) ||
+          job.company?.toLowerCase().includes(searchTerm),
+      );
+    }
+
+    // Filter by location
+    if (searchParams?.location && searchParams.location !== "all") {
+      const location = searchParams.location.toString().toLowerCase();
+      filtered = filtered.filter((job) =>
+        job.location?.toLowerCase().includes(location),
+      );
+    }
+
+    // Filter by category
+    if (searchParams?.category && searchParams.category !== "all") {
+      const category = searchParams.category.toString().toLowerCase();
+      filtered = filtered.filter((job) =>
+        job.category?.toLowerCase().includes(category),
+      );
+    }
+
+    setFilteredJobs(filtered);
+  }, [jobs, searchParams]); // Re-run when jobs or searchParams change
+
+  // Show loading state
+  if (loading) {
     return (
-      matchesSearch && matchesLocation && matchesCategory && matchesJobType
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading jobs...</p>
+        </div>
+      </div>
     );
-  });
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/30">
-      {/* Hero Section with Search */}
       <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white">
         <div className="container mx-auto px-4 py-16">
           <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">
@@ -78,13 +160,24 @@ export default async function JobsPage({
             {/* Results Header */}
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-gray-800">
-                {filteredJobs.length} Jobs Found
+                {filteredJobs.length} Job{filteredJobs.length !== 1 ? "s" : ""}{" "}
+                Found
               </h2>
-              <select className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                <option>Most Relevant</option>
-                <option>Latest</option>
-                <option>Highest Paying</option>
-              </select>
+              {(searchParams?.search ||
+                (searchParams?.location && searchParams.location !== "all") ||
+                (searchParams?.category &&
+                  searchParams.category !== "all")) && (
+                <span className="text-sm text-gray-500">
+                  Filtered by:{" "}
+                  {searchParams?.search && `"${searchParams.search}"`}
+                  {searchParams?.location &&
+                    searchParams.location !== "all" &&
+                    ` • ${searchParams.location}`}
+                  {searchParams?.category &&
+                    searchParams.category !== "all" &&
+                    ` • ${searchParams.category}`}
+                </span>
+              )}
             </div>
 
             {/* Job Cards */}
