@@ -5,11 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { SlidersHorizontal, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-interface JobFiltersProps {
-  categories: string[];
-  locations: string[];
-}
+import { JobFiltersProps } from "@/types/job";
 
 export default function JobFilters({ categories, locations }: JobFiltersProps) {
   const router = useRouter();

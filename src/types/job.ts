@@ -43,3 +43,22 @@ export interface JobFilters {
   category: string;
   jobType: string;
 }
+
+export interface Filters {
+  search: string | null;
+  location: string | null;
+  category: string | null;
+}
+
+export const INITIAL_STATE = {
+  jobs: [] as Job[],
+  filteredJobs: [] as Job[],
+  categories: [] as string[],
+  locations: [] as string[],
+  loading: true,
+  error: null as string | null,
+};
+export interface JobFiltersProps {
+  categories: string[];
+  locations: string[];
+}

@@ -6,24 +6,7 @@ import { useSearchParams } from "next/navigation";
 import JobSearch from "@/components/home/JobSearch";
 import JobCard from "@/components/Jobs/JobCard";
 import JobFilters from "@/components/Jobs/JobFilter";
-import { Job } from "@/types/job";
-
-// Types
-interface Filters {
-  search: string | null;
-  location: string | null;
-  category: string | null;
-}
-
-// Constants
-const INITIAL_STATE = {
-  jobs: [] as Job[],
-  filteredJobs: [] as Job[],
-  categories: [] as string[],
-  locations: [] as string[],
-  loading: true,
-  error: null as string | null,
-};
+import { Filters, INITIAL_STATE, Job } from "@/types/job";
 
 export default function JobsPage() {
   const searchParams = useSearchParams();
