@@ -1,128 +1,202 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { useSearchParams } from "next/navigation";
 import JobSearch from "@/components/home/JobSearch";
 import JobCard from "@/components/Jobs/JobCard";
 import JobFilters from "@/components/Jobs/JobFilter";
 import { Job } from "@/types/job";
-import { useSearchParams } from "next/navigation";
+
+// Types
+interface Filters {
+  search: string | null;
+  location: string | null;
+  category: string | null;
+}
+
+// Constants
+const INITIAL_STATE = {
+  jobs: [] as Job[],
+  filteredJobs: [] as Job[],
+  categories: [] as string[],
+  locations: [] as string[],
+  loading: true,
+  error: null as string | null,
+};
 
 export default function JobsPage() {
-  const [jobs, setJobs] = useState<Job[]>([]);
-  const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
-  const [categories, setCategories] = useState<string[]>([]);
-  const [locations, setLocations] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const searchParams = useSearchParams();
-  console.log("search params this", searchParams);
-  // Fetch jobs on component mount
-  useEffect(() => {
-    const fetchJobs = async () => {
-      const category = searchParams.get("category");
 
-      const queryString = category
-        ? `category=${encodeURIComponent(category)}`
-        : "";
-      try {
-        setLoading(true);
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/jobs/${queryString}`,
-          {
-            cache: "no-store",
-          },
-        );
+  // Convert URLSearchParams to plain object for JobSearch component
+  const searchParamsObject = useMemo(() => {
+    const params: { [key: string]: string } = {};
+    searchParams.forEach((value, key) => {
+      params[key] = value;
+    });
+    return params;
+  }, [searchParams]);
 
-        if (!res.ok) {
-          throw new Error("Failed to fetch jobs");
-        }
+  // State
+  const [jobs, setJobs] = useState<Job[]>(INITIAL_STATE.jobs);
+  const [filteredJobs, setFilteredJobs] = useState<Job[]>(
+    INITIAL_STATE.filteredJobs,
+  );
+  const [categories, setCategories] = useState<string[]>(
+    INITIAL_STATE.categories,
+  );
+  const [locations, setLocations] = useState<string[]>(INITIAL_STATE.locations);
+  const [loading, setLoading] = useState(INITIAL_STATE.loading);
+  const [error, setError] = useState<string | null>(INITIAL_STATE.error);
 
-        const data = await res.json();
-        const jobsData = data?.data?.jobs ?? [];
+  // Get current filters from URL
+  const currentFilters: Filters = useMemo(
+    () => ({
+      search: searchParams.get("search"),
+      location: searchParams.get("location"),
+      category: searchParams.get("category"),
+    }),
+    [searchParams],
+  );
 
-        setJobs(jobsData);
+  // Check if any filters are active
+  const hasActiveFilters = useMemo(() => {
+    return Boolean(
+      currentFilters.search ||
+      (currentFilters.location && currentFilters.location !== "all") ||
+      (currentFilters.category && currentFilters.category !== "all"),
+    );
+  }, [currentFilters]);
 
-        // Extract unique categories and locations for filters
-        const uniqueCategories = [
-          ...new Set(jobsData.map((job: Job) => job.category)),
-        ];
-        const uniqueLocations = [
-          ...new Set(jobsData.map((job: Job) => job.location)),
-        ];
+  // Build API query params
+  const buildQueryParams = useCallback((): URLSearchParams => {
+    const params = new URLSearchParams();
 
-        setCategories(uniqueCategories);
-        setLocations(uniqueLocations);
+    if (currentFilters.search) params.set("search", currentFilters.search);
+    if (currentFilters.location && currentFilters.location !== "all") {
+      params.set("location", currentFilters.location);
+    }
+    if (currentFilters.category && currentFilters.category !== "all") {
+      params.set("category", currentFilters.category);
+    }
 
-        setError(null);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to fetch jobs");
-        console.error("Error fetching jobs:", err);
-      } finally {
-        setLoading(false);
+    return params;
+  }, [currentFilters]);
+
+  // Extract unique values from jobs
+  const extractUniqueValues = useCallback((jobsData: Job[]) => {
+    const uniqueCategories = [
+      ...new Set(jobsData.map((job) => job.category).filter(Boolean)),
+    ];
+
+    const uniqueLocations = [
+      ...new Set(jobsData.map((job) => job.location).filter(Boolean)),
+    ];
+
+    setCategories(uniqueCategories);
+    setLocations(uniqueLocations);
+  }, []);
+
+  // Fetch jobs from API
+  const fetchJobs = useCallback(async () => {
+    const params = buildQueryParams();
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/jobs${
+      params.toString() ? `?${params.toString()}` : ""
+    }`;
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await fetch(url, { cache: "no-store" });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch jobs: ${response.status}`);
       }
-    };
 
-    fetchJobs();
-  }, []); // Empty dependency array means this runs once on mount
+      const data = await response.json();
+      const jobsData = data?.data?.jobs ?? [];
 
-  // Filter jobs based on searchParams
-  useEffect(() => {
-    if (!jobs.length) return;
+      setJobs(jobsData);
+      extractUniqueValues(jobsData);
+    } catch (err) {
+      console.error("Error fetching jobs:", err);
+      setError(err instanceof Error ? err.message : "Failed to fetch jobs");
+    } finally {
+      setLoading(false);
+    }
+  }, [buildQueryParams, extractUniqueValues]);
+
+  // Apply client-side filtering
+  const applyFilters = useCallback(() => {
+    if (!jobs.length) {
+      setFilteredJobs([]);
+      return;
+    }
 
     let filtered = [...jobs];
 
-    // Filter by search term
-    if (searchParams?.search) {
-      const searchTerm = searchParams.search.toString().toLowerCase();
+    // Apply search filter
+    if (currentFilters.search) {
+      const searchLower = currentFilters.search.toLowerCase();
       filtered = filtered.filter(
         (job) =>
-          job.title?.toLowerCase().includes(searchTerm) ||
-          job.description?.toLowerCase().includes(searchTerm) ||
-          job.company?.toLowerCase().includes(searchTerm),
+          job.title?.toLowerCase().includes(searchLower) ||
+          job.description?.toLowerCase().includes(searchLower) ||
+          job.company?.toLowerCase().includes(searchLower) ||
+          job.tags?.some((tag) => tag.toLowerCase().includes(searchLower)),
       );
     }
 
-    // Filter by location
-    if (searchParams?.location && searchParams.location !== "all") {
-      const location = searchParams.location.toString().toLowerCase();
+    // Apply location filter
+    if (currentFilters.location && currentFilters.location !== "all") {
+      const locationLower = currentFilters.location.toLowerCase();
       filtered = filtered.filter((job) =>
-        job.location?.toLowerCase().includes(location),
+        job.location?.toLowerCase().includes(locationLower),
       );
     }
 
-    // Filter by category
-    if (searchParams?.category && searchParams.category !== "all") {
-      const category = searchParams.category.toString().toLowerCase();
+    // Apply category filter
+    if (currentFilters.category && currentFilters.category !== "all") {
+      const categoryLower = currentFilters.category.toLowerCase();
       filtered = filtered.filter((job) =>
-        job.category?.toLowerCase().includes(category),
+        job.category?.toLowerCase().includes(categoryLower),
       );
     }
 
     setFilteredJobs(filtered);
-  }, [jobs, searchParams]); // Re-run when jobs or searchParams change
+  }, [jobs, currentFilters]);
 
-  // Show loading state
+  // Effects
+  useEffect(() => {
+    fetchJobs();
+  }, [fetchJobs]);
+
+  useEffect(() => {
+    applyFilters();
+  }, [applyFilters]);
+
+  // Loading state
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading jobs...</p>
+          <div className="w-16 h-16 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin mx-auto" />
+          <p className="mt-4 text-gray-600 font-medium">Loading jobs...</p>
         </div>
       </div>
     );
   }
 
-  // Show error state
+  // Error state
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-600 mb-4">{error}</p>
+        <div className="text-center max-w-md mx-auto p-6">
+          <div className="text-red-600 mb-4 text-lg">⚠️ {error}</div>
           <button
             onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+            className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200"
           >
             Try Again
           </button>
@@ -131,24 +205,47 @@ export default function JobsPage() {
     );
   }
 
+  // Active filters display
+  const renderActiveFilters = () => {
+    if (!hasActiveFilters) return null;
+
+    const parts = [];
+    if (currentFilters.search) {
+      parts.push(`"${currentFilters.search}"`);
+    }
+    if (currentFilters.location && currentFilters.location !== "all") {
+      parts.push(currentFilters.location);
+    }
+    if (currentFilters.category && currentFilters.category !== "all") {
+      parts.push(currentFilters.category);
+    }
+
+    return (
+      <span className="text-sm text-gray-500">
+        Filtered by: {parts.join(" • ")}
+      </span>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/30">
-      <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white">
-        <div className="container mx-auto px-4 py-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">
+      {/* Hero Section - Adjusted padding for mobile */}
+      <section className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white">
+        <div className="container mx-auto px-4 py-12 md:py-16">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-3 md:mb-4">
             Find Your Dream Job Today
           </h1>
-          <p className="text-xl text-center text-indigo-100 mb-8">
+          <p className="text-lg md:text-xl text-center text-indigo-100 mb-6 md:mb-8 px-2">
             Discover thousands of job opportunities with top companies
           </p>
-          <JobSearch initialJobs={jobs} searchParams={searchParams} />
+          <JobSearch initialJobs={jobs} searchParams={searchParamsObject} />
         </div>
-      </div>
+      </section>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Filters Sidebar */}
+      <section className="container mx-auto px-4 py-6 md:py-8">
+        <div className="flex flex-col lg:flex-row gap-6 md:gap-8">
+          {/* Filters Sidebar - Hidden on mobile, visible on desktop */}
           <aside className="lg:w-80">
             <div className="sticky top-4">
               <JobFilters categories={categories} locations={locations} />
@@ -158,48 +255,34 @@ export default function JobsPage() {
           {/* Jobs Grid */}
           <main className="flex-1">
             {/* Results Header */}
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-800">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+              <h2 className="text-xl md:text-2xl font-bold text-gray-800">
                 {filteredJobs.length} Job{filteredJobs.length !== 1 ? "s" : ""}{" "}
                 Found
               </h2>
-              {(searchParams?.search ||
-                (searchParams?.location && searchParams.location !== "all") ||
-                (searchParams?.category &&
-                  searchParams.category !== "all")) && (
-                <span className="text-sm text-gray-500">
-                  Filtered by:{" "}
-                  {searchParams?.search && `"${searchParams.search}"`}
-                  {searchParams?.location &&
-                    searchParams.location !== "all" &&
-                    ` • ${searchParams.location}`}
-                  {searchParams?.category &&
-                    searchParams.category !== "all" &&
-                    ` • ${searchParams.category}`}
-                </span>
-              )}
+              {renderActiveFilters()}
             </div>
 
             {/* Job Cards */}
             {filteredJobs.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {filteredJobs.map((job: Job) => (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                {filteredJobs.map((job) => (
                   <JobCard key={job._id} job={job} />
                 ))}
               </div>
             ) : (
-              <div className="text-center py-16 bg-white rounded-xl shadow-sm">
-                <h3 className="text-2xl font-semibold text-gray-700 mb-2">
+              <div className="text-center py-12 md:py-16 bg-white rounded-xl shadow-sm">
+                <h3 className="text-xl md:text-2xl font-semibold text-gray-700 mb-2">
                   No Jobs Found
                 </h3>
-                <p className="text-gray-500">
+                <p className="text-gray-500 px-4">
                   Try adjusting your search or filters
                 </p>
               </div>
             )}
           </main>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

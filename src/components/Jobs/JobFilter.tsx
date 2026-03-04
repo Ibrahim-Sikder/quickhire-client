@@ -19,10 +19,10 @@ export default function JobFilters({ categories, locations }: JobFiltersProps) {
   const updateFilter = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
 
-    // Preserve existing search term if it exists
-    const currentSearch = searchParams.get("search");
-    if (currentSearch) {
-      params.set("search", currentSearch);
+    // Preserve the title/search parameter
+    const currentTitle = searchParams.get("title");
+    if (currentTitle) {
+      params.set("title", currentTitle);
     }
 
     if (value && value !== "all") {
@@ -35,88 +35,16 @@ export default function JobFilters({ categories, locations }: JobFiltersProps) {
   };
 
   const clearFilters = () => {
-    // Preserve search term if it exists
     const params = new URLSearchParams();
-    const currentSearch = searchParams.get("search");
-    if (currentSearch) {
-      params.set("search", currentSearch);
+
+    // Preserve title if it exists
+    const currentTitle = searchParams.get("title");
+    if (currentTitle) {
+      params.set("title", currentTitle);
     }
+
     router.push(`/jobs?${params.toString()}`);
   };
-
-  const FilterContent = () => (
-    <div className="space-y-6">
-      <div>
-        <h3 className="font-semibold text-gray-700 mb-3">Category</h3>
-        <div className="space-y-2">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="radio"
-              name="category"
-              value="all"
-              checked={!searchParams.get("category")}
-              onChange={() => updateFilter("category", "all")}
-              className="text-indigo-600"
-            />
-            <span className="text-gray-600">All Categories</span>
-          </label>
-          {categories.map((category) => (
-            <label
-              key={category}
-              className="flex items-center gap-2 cursor-pointer"
-            >
-              <input
-                type="radio"
-                name="category"
-                value={category}
-                checked={searchParams.get("category") === category}
-                onChange={() => updateFilter("category", category)}
-                className="text-indigo-600"
-              />
-              <span className="text-gray-600">{category}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <h3 className="font-semibold text-gray-700 mb-3">Location</h3>
-        <div className="space-y-2">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="radio"
-              name="location"
-              value="all"
-              checked={!searchParams.get("location")}
-              onChange={() => updateFilter("location", "all")}
-              className="text-indigo-600"
-            />
-            <span className="text-gray-600">All Locations</span>
-          </label>
-          {locations.map((location) => (
-            <label
-              key={location}
-              className="flex items-center gap-2 cursor-pointer"
-            >
-              <input
-                type="radio"
-                name="location"
-                value={location}
-                checked={searchParams.get("location") === location}
-                onChange={() => updateFilter("location", location)}
-                className="text-indigo-600"
-              />
-              <span className="text-gray-600">{location}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      <Button onClick={clearFilters} variant="outline" className="w-full">
-        Clear Filters
-      </Button>
-    </div>
-  );
 
   return (
     <>
@@ -126,13 +54,102 @@ export default function JobFilters({ categories, locations }: JobFiltersProps) {
           <h2 className="text-xl font-bold text-gray-800">Filters</h2>
           <SlidersHorizontal className="h-5 w-5 text-gray-400" />
         </div>
-        <FilterContent />
+
+        {/* Filter Content */}
+        <div className="space-y-6">
+          {/* Category Filter */}
+          <div>
+            <h3 className="font-semibold text-gray-700 mb-3">Category</h3>
+            <div className="space-y-2 max-h-60 overflow-y-auto pr-2">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="category"
+                  value="all"
+                  checked={
+                    !searchParams.get("category") ||
+                    searchParams.get("category") === "all"
+                  }
+                  onChange={() => updateFilter("category", "all")}
+                  className="text-indigo-600"
+                />
+                <span className="text-gray-600">All Categories</span>
+              </label>
+              {categories.length > 0 ? (
+                categories.map((category) => (
+                  <label
+                    key={category}
+                    className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-1 rounded"
+                  >
+                    <input
+                      type="radio"
+                      name="category"
+                      value={category}
+                      checked={searchParams.get("category") === category}
+                      onChange={() => updateFilter("category", category)}
+                      className="text-indigo-600"
+                    />
+                    <span className="text-gray-600">{category}</span>
+                  </label>
+                ))
+              ) : (
+                <p className="text-gray-400 text-sm">No categories available</p>
+              )}
+            </div>
+          </div>
+
+          {/* Location Filter */}
+          <div>
+            <h3 className="font-semibold text-gray-700 mb-3">Location</h3>
+            <div className="space-y-2 max-h-60 overflow-y-auto pr-2">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="location"
+                  value="all"
+                  checked={
+                    !searchParams.get("location") ||
+                    searchParams.get("location") === "all"
+                  }
+                  onChange={() => updateFilter("location", "all")}
+                  className="text-indigo-600"
+                />
+                <span className="text-gray-600">All Locations</span>
+              </label>
+              {locations.length > 0 ? (
+                locations.map((location) => (
+                  <label
+                    key={location}
+                    className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-1 rounded"
+                  >
+                    <input
+                      type="radio"
+                      name="location"
+                      value={location}
+                      checked={searchParams.get("location") === location}
+                      onChange={() => updateFilter("location", location)}
+                      className="text-indigo-600"
+                    />
+                    <span className="text-gray-600">{location}</span>
+                  </label>
+                ))
+              ) : (
+                <p className="text-gray-400 text-sm">No locations available</p>
+              )}
+            </div>
+          </div>
+
+          <Button onClick={clearFilters} variant="outline" className="w-full">
+            Clear Filters
+          </Button>
+        </div>
       </div>
 
       {/* Mobile Filters Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className="lg:hidden fixed bottom-4 right-4 bg-indigo-600 text-white p-4 rounded-full shadow-lg z-40"
+        className="lg:hidden fixed bottom-4 right-4 bg-indigo-600 text-white p-4 rounded-full shadow-lg z-40 hover:bg-indigo-700 transition-colors duration-200"
+        aria-label="Open filters"
       >
         <SlidersHorizontal className="h-6 w-6" />
       </button>
@@ -140,14 +157,129 @@ export default function JobFilters({ categories, locations }: JobFiltersProps) {
       {/* Mobile Filters Modal */}
       {isOpen && (
         <div className="lg:hidden fixed inset-0 bg-black/50 z-50">
-          <div className="absolute right-0 top-0 h-full w-80 bg-white p-6 overflow-y-auto">
+          <div className="absolute right-0 top-0 h-full w-[85%] max-w-sm bg-white p-6 overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-gray-800">Filters</h2>
-              <button onClick={() => setIsOpen(false)}>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200"
+                aria-label="Close filters"
+              >
                 <X className="h-6 w-6 text-gray-400" />
               </button>
             </div>
-            <FilterContent />
+
+            {/* Mobile Filter Content */}
+            <div className="space-y-6">
+              {/* Category Filter */}
+              <div>
+                <h3 className="font-semibold text-gray-700 mb-3">Category</h3>
+                <div className="space-y-2 max-h-60 overflow-y-auto pr-2">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="category"
+                      value="all"
+                      checked={
+                        !searchParams.get("category") ||
+                        searchParams.get("category") === "all"
+                      }
+                      onChange={() => {
+                        updateFilter("category", "all");
+                        setIsOpen(false);
+                      }}
+                      className="text-indigo-600"
+                    />
+                    <span className="text-gray-600">All Categories</span>
+                  </label>
+                  {categories.length > 0 ? (
+                    categories.map((category) => (
+                      <label
+                        key={category}
+                        className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-1 rounded"
+                      >
+                        <input
+                          type="radio"
+                          name="category"
+                          value={category}
+                          checked={searchParams.get("category") === category}
+                          onChange={() => {
+                            updateFilter("category", category);
+                            setIsOpen(false);
+                          }}
+                          className="text-indigo-600"
+                        />
+                        <span className="text-gray-600">{category}</span>
+                      </label>
+                    ))
+                  ) : (
+                    <p className="text-gray-400 text-sm">
+                      No categories available
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* Location Filter */}
+              <div>
+                <h3 className="font-semibold text-gray-700 mb-3">Location</h3>
+                <div className="space-y-2 max-h-60 overflow-y-auto pr-2">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="location"
+                      value="all"
+                      checked={
+                        !searchParams.get("location") ||
+                        searchParams.get("location") === "all"
+                      }
+                      onChange={() => {
+                        updateFilter("location", "all");
+                        setIsOpen(false);
+                      }}
+                      className="text-indigo-600"
+                    />
+                    <span className="text-gray-600">All Locations</span>
+                  </label>
+                  {locations.length > 0 ? (
+                    locations.map((location) => (
+                      <label
+                        key={location}
+                        className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-1 rounded"
+                      >
+                        <input
+                          type="radio"
+                          name="location"
+                          value={location}
+                          checked={searchParams.get("location") === location}
+                          onChange={() => {
+                            updateFilter("location", location);
+                            setIsOpen(false);
+                          }}
+                          className="text-indigo-600"
+                        />
+                        <span className="text-gray-600">{location}</span>
+                      </label>
+                    ))
+                  ) : (
+                    <p className="text-gray-400 text-sm">
+                      No locations available
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <Button
+                onClick={() => {
+                  clearFilters();
+                  setIsOpen(false);
+                }}
+                variant="outline"
+                className="w-full"
+              >
+                Clear Filters
+              </Button>
+            </div>
           </div>
         </div>
       )}

@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { useRouter } from "next/navigation";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 
 interface Job {
   _id: string;
@@ -38,35 +38,54 @@ export default function JobSearch({
   const [isLoading, setIsLoading] = useState(false);
   const suggestionsRef = useRef<HTMLDivElement>(null);
 
-  // Get unique locations from initialJobs
-  const locations = [...new Set(initialJobs.map((job: Job) => job.location))];
+  // Use useMemo to memoize locations - only recalculate when initialJobs changes
+  const locations = useMemo(() => {
+    return [...new Set(initialJobs.map((job: Job) => job.location))];
+  }, [initialJobs]);
 
-  // Filter jobs based on search term for suggestions
+  // Use useRef to track previous search term to prevent unnecessary updates
+  const previousSearchTerm = useRef(searchTerm);
+
+  // Filter jobs based on search term for suggestions - with proper dependencies
   useEffect(() => {
+    // Only run if searchTerm has actually changed
+    if (previousSearchTerm.current === searchTerm) {
+      return;
+    }
+    previousSearchTerm.current = searchTerm;
+
     if (searchTerm.trim().length > 0) {
       setIsLoading(true);
 
-      // Filter jobs that match title, tags, or category
-      const filtered = initialJobs
-        .filter((job) => {
-          const searchLower = searchTerm.toLowerCase();
-          return (
-            job.title.toLowerCase().includes(searchLower) ||
-            job.category.toLowerCase().includes(searchLower) ||
-            job.tags.some((tag) => tag.toLowerCase().includes(searchLower)) ||
-            job.company.toLowerCase().includes(searchLower)
-          );
-        })
-        .slice(0, 5); // Limit to 5 suggestions
+      // Use a timeout to debounce the filtering
+      const timeoutId = setTimeout(() => {
+        // Filter jobs that match title, tags, or category
+        const filtered = initialJobs
+          .filter((job) => {
+            const searchLower = searchTerm.toLowerCase();
+            return (
+              job.title?.toLowerCase().includes(searchLower) ||
+              job.category?.toLowerCase().includes(searchLower) ||
+              job.tags?.some((tag) =>
+                tag.toLowerCase().includes(searchLower),
+              ) ||
+              job.company?.toLowerCase().includes(searchLower)
+            );
+          })
+          .slice(0, 5); // Limit to 5 suggestions
 
-      setSuggestions(filtered);
-      setShowSuggestions(true);
-      setIsLoading(false);
+        setSuggestions(filtered);
+        setShowSuggestions(true);
+        setIsLoading(false);
+      }, 300); // Debounce for 300ms
+
+      return () => clearTimeout(timeoutId);
     } else {
       setSuggestions([]);
       setShowSuggestions(false);
+      setIsLoading(false);
     }
-  }, [searchTerm, initialJobs]);
+  }, [searchTerm, initialJobs]); // Keep dependencies, but added debounce and previous value check
 
   // Close suggestions when clicking outside
   useEffect(() => {
@@ -83,36 +102,30 @@ export default function JobSearch({
   }, []);
 
   // Handle search - redirect to jobs page with search params
-  const handleSearch = () => {
+  const handleSearch = useCallback(() => {
     const params = new URLSearchParams();
     if (searchTerm.trim()) {
-      params.set("search", searchTerm.trim());
+      params.set("title", searchTerm.trim());
     }
     if (location && location !== "all") {
       params.set("location", location);
     }
     router.push(`/jobs?${params.toString()}`);
     setShowSuggestions(false);
-  };
+  }, [searchTerm, location, router]);
 
-  // Handle suggestion click - set search term and redirect
-  const handleSuggestionClick = (job: Job) => {
+  // Handle suggestion click - ONLY update search term, do NOT navigate
+  const handleSuggestionClick = useCallback((job: Job) => {
     setSearchTerm(job.title);
     setShowSuggestions(false);
-    const params = new URLSearchParams();
-    params.set("search", job.title);
-    if (location && location !== "all") {
-      params.set("location", location);
-    }
-    router.push(`/jobs?${params.toString()}`);
-  };
+  }, []);
 
   // Clear search
-  const clearSearch = () => {
+  const clearSearch = useCallback(() => {
     setSearchTerm("");
     setSuggestions([]);
     setShowSuggestions(false);
-  };
+  }, []);
 
   return (
     <div className="w-full py-8">
@@ -148,7 +161,7 @@ export default function JobSearch({
           <div className="flex items-center px-6 py-4 flex-shrink-0">
             <MapPin className="h-5 w-5 text-gray-400 mr-3 flex-shrink-0" />
             <Select value={location} onValueChange={setLocation}>
-              <SelectTrigger className="border-0 shadow-none focus:ring-0 focus:ring-offset-0 p-0 h-auto w-auto">
+              <SelectTrigger className="border-0 shadow-none focus:ring-0 focus:ring-offset-0 p-0 h-auto w-auto min-w-[120px]">
                 <SelectValue placeholder="All Locations" />
               </SelectTrigger>
               <SelectContent>
@@ -193,7 +206,7 @@ export default function JobSearch({
                       <span className="bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full">
                         {job.category}
                       </span>
-                      {job.tags.slice(0, 2).map((tag, index) => (
+                      {job.tags?.slice(0, 2).map((tag, index) => (
                         <span
                           key={index}
                           className="bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full"
@@ -201,7 +214,7 @@ export default function JobSearch({
                           {tag}
                         </span>
                       ))}
-                      {job.tags.length > 2 && (
+                      {job.tags?.length > 2 && (
                         <span className="text-gray-400">
                           +{job.tags.length - 2}
                         </span>
