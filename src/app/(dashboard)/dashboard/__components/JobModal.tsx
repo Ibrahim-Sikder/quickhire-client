@@ -76,8 +76,6 @@ import StarterKit from "@tiptap/starter-kit";
 import { availableTags, defaultCategories } from "@/constant/job";
 import { JobAddModalProps } from "@/types/job";
 
-const API_BASE_URL = "http://localhost:8000/api/v1";
-
 // Enhanced Category Select with Search Component
 const CategorySelect = ({ value, onChange, disabled }: any) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -741,7 +739,7 @@ export default function JobAddModal({
       if (jobToEdit) {
         // Update existing job
         response = await axios.patch(
-          `${API_BASE_URL}/jobs/${jobToEdit._id}`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/jobs/${jobToEdit._id}`,
           formData,
           {
             headers: {
@@ -761,11 +759,15 @@ export default function JobAddModal({
         }
       } else {
         // Create new job
-        response = await axios.post(`${API_BASE_URL}/jobs`, formData, {
-          headers: {
-            "Content-Type": "application/json",
+        response = await axios.post(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/jobs`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
           },
-        });
+        );
 
         if (response.data.success) {
           toast.success("Job created successfully!", {
