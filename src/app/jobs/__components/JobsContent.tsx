@@ -19,17 +19,13 @@ export default function JobsContent() {
     return params;
   }, [searchParams]);
 
-  // State
-  const [jobs, setJobs] = useState<Job[]>(INITIAL_STATE.jobs);
-  const [filteredJobs, setFilteredJobs] = useState<Job[]>(
-    INITIAL_STATE.filteredJobs,
-  );
-  const [categories, setCategories] = useState<string[]>(
-    INITIAL_STATE.categories,
-  );
-  const [locations, setLocations] = useState<string[]>(INITIAL_STATE.locations);
-  const [loading, setLoading] = useState(INITIAL_STATE.loading);
-  const [error, setError] = useState<string | null>(INITIAL_STATE.error);
+  // State with proper initialization
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [locations, setLocations] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // Get current filters from URL
   const currentFilters: Filters = useMemo(
@@ -67,6 +63,8 @@ export default function JobsContent() {
 
   // Extract unique values from jobs
   const extractUniqueValues = useCallback((jobsData: Job[]) => {
+    if (!jobsData || jobsData.length === 0) return;
+
     const uniqueCategories = [
       ...new Set(jobsData.map((job) => job.category).filter(Boolean)),
     ];
@@ -86,21 +84,36 @@ export default function JobsContent() {
       params.toString() ? `?${params.toString()}` : ""
     }`;
 
+    console.log("Fetching jobs from:", url); // Debug log
+
     try {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(url, { cache: "no-store" });
+      const response = await fetch(url, {
+        cache: "no-store",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       if (!response.ok) {
         throw new Error(`Failed to fetch jobs: ${response.status}`);
       }
 
       const data = await response.json();
-      const jobsData = data?.data?.jobs ?? [];
+      console.log("API Response:", data); // Debug log
 
-      setJobs(jobsData);
-      extractUniqueValues(jobsData);
+      // Handle different API response structures
+      const jobsData = data?.data?.jobs ?? data?.jobs ?? data ?? [];
+
+      if (Array.isArray(jobsData)) {
+        setJobs(jobsData);
+        extractUniqueValues(jobsData);
+      } else {
+        console.error("Unexpected data format:", data);
+        setJobs([]);
+      }
     } catch (err) {
       console.error("Error fetching jobs:", err);
       setError(err instanceof Error ? err.message : "Failed to fetch jobs");
@@ -158,6 +171,12 @@ export default function JobsContent() {
     applyFilters();
   }, [applyFilters]);
 
+  // Debug logs
+  useEffect(() => {
+    console.log("Jobs state:", jobs);
+    console.log("Filtered jobs:", filteredJobs);
+  }, [jobs, filteredJobs]);
+
   // Loading state
   if (loading) {
     return (
@@ -211,7 +230,7 @@ export default function JobsContent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/30">
-      {/* Hero Section - Adjusted padding for mobile */}
+      {/* Hero Section */}
       <section className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white">
         <div className="container mx-auto px-4 py-12 md:py-16">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-3 md:mb-4">
@@ -227,7 +246,7 @@ export default function JobsContent() {
       {/* Main Content */}
       <section className="container mx-auto px-4 py-6 md:py-8">
         <div className="flex flex-col lg:flex-row gap-6 md:gap-8">
-          {/* Filters Sidebar - Hidden on mobile, visible on desktop */}
+          {/* Filters Sidebar */}
           <aside className="lg:w-80">
             <div className="sticky top-4">
               <JobFilters categories={categories} locations={locations} />
