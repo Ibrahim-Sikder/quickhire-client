@@ -5,10 +5,7 @@
 import { useState } from "react";
 import { Send, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { CompanyIcon } from "@/utils/companyIcon";
-
 import toast from "react-hot-toast";
 import {
   FormData,
@@ -16,6 +13,7 @@ import {
   initialFormData,
   JobApplyProps,
 } from "@/types/jobApply";
+import JobApplicationForm from "./JobApplyForm";
 
 export default function JobApply({ job, isOpen, onClose }: JobApplyProps) {
   const [formData, setFormData] = useState<FormData>(initialFormData);
@@ -214,8 +212,8 @@ export default function JobApply({ job, isOpen, onClose }: JobApplyProps) {
           </div>
         </div>
 
+        {/* Success State */}
         {isSuccess ? (
-          /* Success State */
           <div className="text-center py-8">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Send className="h-8 w-8 text-green-600" />
@@ -226,101 +224,17 @@ export default function JobApply({ job, isOpen, onClose }: JobApplyProps) {
             <p className="text-slate-600">We'll notify you of any updates.</p>
           </div>
         ) : (
-          /* Form */
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Name Field */}
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
-                Full Name <span className="text-red-500">*</span>
-              </label>
-              <Input
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                placeholder="John Doe"
-                className={getInputClassName("name")}
-                disabled={isSubmitting}
-              />
-              {touched.name && errors.name && (
-                <p className="mt-1 text-xs text-red-500">{errors.name}</p>
-              )}
-            </div>
-
-            {/* Email Field */}
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
-                Email <span className="text-red-500">*</span>
-              </label>
-              <Input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                placeholder="john@example.com"
-                className={getInputClassName("email")}
-                disabled={isSubmitting}
-              />
-              {touched.email && errors.email && (
-                <p className="mt-1 text-xs text-red-500">{errors.email}</p>
-              )}
-            </div>
-
-            {/* Resume URL Field */}
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
-                Resume URL <span className="text-red-500">*</span>
-              </label>
-              <Input
-                name="resume_link"
-                value={formData.resume_link}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                placeholder="https://drive.google.com/..."
-                className={getInputClassName("resume_link")}
-                disabled={isSubmitting}
-              />
-              {touched.resume_link && errors.resume_link ? (
-                <p className="mt-1 text-xs text-red-500">
-                  {errors.resume_link}
-                </p>
-              ) : (
-                <p className="mt-1 text-xs text-slate-500">
-                  Google Drive, Dropbox, or any shareable link
-                </p>
-              )}
-            </div>
-
-            {/* Cover Note Field */}
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
-                Cover Note <span className="text-red-500">*</span>
-              </label>
-              <Textarea
-                name="cover_note"
-                value={formData.cover_note}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                placeholder="Why are you the best candidate? (Minimum 20 characters)"
-                rows={4}
-                className={getInputClassName("cover_note")}
-                disabled={isSubmitting}
-              />
-              {touched.cover_note && errors.cover_note && (
-                <p className="mt-1 text-xs text-red-500">{errors.cover_note}</p>
-              )}
-            </div>
-
-            {/* Submit Button */}
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-3 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isSubmitting ? "Submitting..." : "Submit Application"}
-            </Button>
-          </form>
+          /* Form Component */
+          <JobApplicationForm
+            formData={formData}
+            errors={errors}
+            touched={touched}
+            isSubmitting={isSubmitting}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            onSubmit={handleSubmit}
+            getInputClassName={getInputClassName}
+          />
         )}
       </div>
     </div>

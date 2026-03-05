@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import Header from "@/components/shared/Header";
-import Footer from "@/components/shared/Footer";
 import { Toaster } from "react-hot-toast";
+import LayoutContent from "./(dashboard)/dashboard/__components/LayoutContent";
+import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,9 +30,8 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Toaster />
-        <Header />
-        {children}
-        <Footer />
+        {/* We need to use a client component to check the route */}
+        <LayoutContent>{children}</LayoutContent>
       </body>
     </html>
   );

@@ -146,7 +146,7 @@ export default function JobDetailPage() {
           <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 px-4 md:px-8 py-6 md:py-8">
             <div className="flex flex-col md:flex-row md:items-start gap-4 md:gap-6">
               <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 md:p-4 w-fit">
-                <CompanyIcon company={job.company} size={40} />
+                <CompanyIcon company={job.company} />
               </div>
               <div className="flex-1">
                 <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2 md:mb-3">

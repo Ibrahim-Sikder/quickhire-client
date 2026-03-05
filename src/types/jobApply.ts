@@ -26,3 +26,15 @@ export const initialFormData: FormData = {
   resume_link: "",
   cover_note: "",
 };
+
+export type FieldName = keyof FormData;
+
+export interface FormField {
+  name: FieldName;
+  label: string;
+  type?: string;
+  placeholder: string;
+  component: React.ElementType;
+  helperText?: string | null;
+  rows?: number;
+}

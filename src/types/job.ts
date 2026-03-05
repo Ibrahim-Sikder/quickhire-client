@@ -28,8 +28,10 @@ export interface Job {
   salary?: string;
   experience?: string;
   jobType?: string;
+  applicants?: number;
+  benefits?: string[];
+  isActive?: boolean;
 }
-
 export interface ApplyFormData {
   name: string;
   email: string;
