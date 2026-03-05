@@ -27,7 +27,7 @@ export default function Header() {
 
         {/* Desktop Navigation - Hidden on mobile */}
         <nav className="hidden md:flex items-center gap-8 flex-1 justify-center font-medium text-gray-700">
-          <Link href="#" className="hover:text-gray-900 transition">
+          <Link href="/jobs" className="hover:text-gray-900 transition">
             Find Jobs
           </Link>
           <Link href="#" className="hover:text-gray-900 transition">
