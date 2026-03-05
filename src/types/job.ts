@@ -1,3 +1,14 @@
+import {
+  BarChart3,
+  Briefcase,
+  Code,
+  Palette,
+  Smartphone,
+  TrendingUp,
+  Users,
+} from "lucide-react";
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface JobListing {
   _id: string;
   title: string;
@@ -63,4 +74,31 @@ export const INITIAL_STATE = {
 export interface JobFiltersProps {
   categories: string[];
   locations: string[];
+}
+
+export interface JobAddModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onJobAdded?: (job: any) => void;
+  onJobUpdated?: (job: any) => void;
+  jobToEdit?: Job | null;
+}
+
+export const iconMap: Record<string, any> = {
+  Design: Palette,
+  Sales: BarChart3,
+  Marketing: TrendingUp,
+  Finance: BarChart3,
+  Technology: Smartphone,
+  Engineering: Code,
+  Business: Briefcase,
+  "Human Resources": Users,
+  "Human Resource": Users,
+  "Software Engineering": Code,
+};
+
+export interface CategoryData {
+  name: string;
+  count: number;
+  isActive: boolean;
 }

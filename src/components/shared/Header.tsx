@@ -1,54 +1,34 @@
 import { Button } from "@/components/ui/button";
-
+import Image from "next/image";
+import logo from "@/assets/logo.png";
+import Link from "next/link";
 export default function Header() {
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-purple-200">
-      <div className="container max-w-7xl mx-auto flex items-center justify-between h-16 px-6">
+    <header className="sticky top-0 z-50 bg-[#F8F8FD] ">
+      <div className="container w-full max-w-[1300px] mx-auto flex items-center justify-between h-16 px-6">
         {/* Logo */}
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-lg">Q</span>
+        <div className="flex items-center gap-x-8">
+          <div className="flex items-center gap-2">
+            <Link href="/">
+              {" "}
+              <Image height={30} width={30} src={logo} alt="logo" />
+            </Link>
+            <span className="font-bold text-xl text-[#25324B]">QuickHire</span>
           </div>
-          <span className="font-bold text-lg text-gray-900">QuickHire</span>
+          <nav className="hidden md:flex items-center gap-8 flex-1 justify-center font-medium text-gray-700 hover:text-gray-900 transition">
+            <Link href="#">Find Jobs</Link>
+            <Link href="#">Browse Companies</Link>
+          </nav>
         </div>
 
-        {/* Navigation */}
-        <nav className="hidden md:flex items-center gap-8 flex-1 justify-center">
-          <a
-            href="#"
-            className="text-sm font-medium text-gray-700 hover:text-gray-900 transition"
-          >
-            For Employers
-          </a>
-          <a
-            href="#"
-            className="text-sm font-medium text-gray-700 hover:text-gray-900 transition"
-          >
-            Browse Jobs
-          </a>
-          <a
-            href="#"
-            className="text-sm font-medium text-gray-700 hover:text-gray-900 transition"
-          >
-            About
-          </a>
-          <a
-            href="#"
-            className="text-sm font-medium text-gray-700 hover:text-gray-900 transition"
-          >
-            Contact
-          </a>
-        </nav>
-
-        {/* Auth Buttons */}
         <div className="flex items-center gap-3">
           <Button
             variant="ghost"
-            className="text-sm font-semibold text-gray-700 hover:text-gray-900 hover:bg-transparent"
+            className="text-sm font-semibold text-[#4640DE] hover:text-gray-900 hover:bg-transparent"
           >
             Login
           </Button>
-          <Button className="text-sm font-semibold bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg">
+          <Button className="text-sm font-semibold bg-[#4640DE] text-white hover:bg-white hover:text-[#4640DE] cursor-pointer px-6 py-5">
             Sign Up
           </Button>
         </div>

@@ -128,12 +128,12 @@ export default function JobSearch({
   }, []);
 
   return (
-    <div className="w-full py-8">
-      <div className="relative">
-        <div className="flex items-center bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200">
+    <div className="w-full">
+      <div className=" md:w-[888px] relative ">
+        <div className="flex flex-col md:flex-row items-center bg-white shadow-lg rounded- overflow-hidden border border-gray-200">
           {/* Job Title Input with Suggestions */}
           <div className="flex items-center px-6 flex-1 py-4 min-w-0 relative">
-            <Search className="h-5 w-5 text-gray-400 mr-3 flex-shrink-0" />
+            <Search className="h-5 w-5  text-gray-400 mr-3 flex-shrink-0" />
             <Input
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -155,10 +155,10 @@ export default function JobSearch({
           </div>
 
           {/* Vertical Divider */}
-          <div className="h-12 w-px bg-gray-200 flex-shrink-0" />
+          <div className="md:h-12  bg-gray-200 flex-shrink-0" />
 
           {/* Location Select */}
-          <div className="flex items-center px-6 py-4 flex-shrink-0">
+          <div className="mb-2 md:mb-0 flex items-center px-6 md:py-4 flex-shrink-0">
             <MapPin className="h-5 w-5 text-gray-400 mr-3 flex-shrink-0" />
             <Select value={location} onValueChange={setLocation}>
               <SelectTrigger className="border-0 shadow-none focus:ring-0 focus:ring-offset-0 p-0 h-auto w-auto min-w-[120px]">
@@ -179,7 +179,7 @@ export default function JobSearch({
           {/* Search Button */}
           <Button
             onClick={handleSearch}
-            className="rounded-none h-full px-8 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-base flex-shrink-0"
+            className="rounded-none h-full w-full md:w-auto  md:px-8 py-4 mr-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-base flex-shrink-0"
           >
             Search my job
           </Button>

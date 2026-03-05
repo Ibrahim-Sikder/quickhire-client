@@ -124,7 +124,26 @@
   }
 }
 @layer utilities {
+  
+}
+
+.pattern{
+    z-index: -2;
+    position: relative;
+    top: -688px;
+    right: -678px;
+
+
+}
+.searchBar {
+    position: relative;
+    width: 100%;
+  }
+
+@media only screen and (min-width: 800px) {
   .hero-right-clip {
-    clip-path:polygon(0 0, 100% 0, 100% 80%, 80% 100%, 0 100%);
+    clip-path: polygon(0 0, 117% 0, 100% 56%, 64% 107%, 0 115%);
+
+
   }
 }
