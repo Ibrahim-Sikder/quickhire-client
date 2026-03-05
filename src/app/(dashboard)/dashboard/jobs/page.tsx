@@ -72,8 +72,6 @@ interface ApiResponse {
   };
 }
 
-const API_BASE_URL = "http://localhost:8000/api/v1";
-
 export default function JobsList() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -90,7 +88,7 @@ export default function JobsList() {
     setIsLoading(true);
     try {
       const response = await axios.get<ApiResponse>(
-        `${API_BASE_URL}/jobs?page=${page}&limit=10`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/jobs?page=${page}&limit=10`,
       );
 
       if (response.data.success) {
@@ -132,9 +130,12 @@ export default function JobsList() {
 
   const toggleJobStatus = async (jobId: string, currentStatus: boolean) => {
     try {
-      const response = await axios.patch(`${API_BASE_URL}/jobs/${jobId}`, {
-        isActive: !currentStatus,
-      });
+      const response = await axios.patch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/jobs/${jobId}`,
+        {
+          isActive: !currentStatus,
+        },
+      );
 
       if (response.data.success) {
         setJobs((prev) =>
@@ -161,9 +162,12 @@ export default function JobsList() {
 
   const toggleFeatured = async (jobId: string, currentFeatured: boolean) => {
     try {
-      const response = await axios.patch(`${API_BASE_URL}/jobs/${jobId}`, {
-        featured: !currentFeatured,
-      });
+      const response = await axios.patch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/jobs/${jobId}`,
+        {
+          featured: !currentFeatured,
+        },
+      );
 
       if (response.data.success) {
         setJobs((prev) =>
@@ -198,7 +202,9 @@ export default function JobsList() {
       const deleteToast = toast.loading("Deleting job...");
 
       try {
-        const response = await axios.delete(`${API_BASE_URL}/jobs/${jobId}`);
+        const response = await axios.delete(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/jobs/${jobId}`,
+        );
 
         if (response.data.success) {
           setJobs((prev) => prev.filter((job) => job._id !== jobId));
@@ -240,7 +246,10 @@ export default function JobsList() {
         title: `${job.title} (Copy)`,
       };
 
-      const response = await axios.post(`${API_BASE_URL}/jobs`, duplicatedJob);
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/jobs`,
+        duplicatedJob,
+      );
 
       if (response.data.success) {
         toast.success("Job duplicated successfully!", {

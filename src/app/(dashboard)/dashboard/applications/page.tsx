@@ -67,11 +67,6 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_BASE_URL ||
-  "http://localhost:8000/api/v1/applications";
-
 interface Application {
   _id: string;
   job: {
@@ -153,7 +148,7 @@ export default function ApplicationsPage() {
     setIsLoading(true);
     try {
       const response = await axios.get<ApiResponse>(
-        `${API_BASE_URL}?page=${page}&limit=10`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}?page=${page}&limit=10`,
       );
 
       if (response.data.success) {
@@ -196,7 +191,9 @@ export default function ApplicationsPage() {
       const deleteToast = toast.loading("Deleting application...");
 
       try {
-        const response = await axios.delete(`${API_BASE_URL}/${applicationId}`);
+        const response = await axios.delete(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/${applicationId}`,
+        );
 
         if (response.data.success) {
           setApplications((prev) =>
