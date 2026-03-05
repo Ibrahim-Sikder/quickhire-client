@@ -2,6 +2,7 @@
 import { getJobs } from "@/lib/getJobs";
 import { CategoryData, iconMap, Job } from "@/types/job";
 import { Briefcase, MoveRight } from "lucide-react";
+import Link from "next/link";
 
 export default async function ExploreCategory() {
   const jobs = await getJobs();
@@ -32,6 +33,8 @@ export default async function ExploreCategory() {
     categories[2].isActive = true;
   }
 
+  console.log("job check", jobs);
+
   return (
     <section className="bg-white mb-20">
       <div className="container max-w-7xl mx-auto px-6">
@@ -41,9 +44,12 @@ export default async function ExploreCategory() {
             Explore by <span className="text-blue-500">category</span>
           </h2>
 
-          <div className="hidden md:flex items-center gap-2 text-sm font-semibold text-indigo-600 cursor-pointer hover:gap-3 transition-all">
+          <Link
+            href="/jobs"
+            className="hidden md:flex items-center gap-2 text-sm font-semibold text-indigo-600 cursor-pointer hover:gap-3 transition-all"
+          >
             Show all jobs <MoveRight size={18} />
-          </div>
+          </Link>
         </div>
 
         {/* Categories Grid */}
@@ -51,119 +57,247 @@ export default async function ExploreCategory() {
           <p className="text-gray-500">No categories found.</p>
         ) : (
           <>
-            {/* Mobile Layout (unchanged) */}
+            {/* Mobile Layout */}
             <div className="md:hidden space-y-4">
               {categories.map((category: CategoryData) => {
                 const Icon = iconMap[category.name] || Briefcase;
                 const isActive = category.isActive;
 
+                // Find jobs in this category
+                const categoryJobs = jobs.filter(
+                  (job: Job) => job.category === category.name,
+                );
+
                 return (
-                  <div
-                    key={category.name}
-                    className={`rounded-lg p-6 border transition-all duration-300 hover:shadow-lg cursor-pointer
-    flex items-center justify-between
-    ${
-      isActive
-        ? "bg-indigo-600 border-indigo-600 text-white"
-        : "bg-white border-gray-200 text-gray-900 hover:border-gray-300"
-    }`}
-                  >
-                    {/* LEFT SIDE */}
-                    <div className="flex items-center gap-4">
-                      {/* ICON */}
+                  <div key={category.name}>
+                    {categoryJobs.length > 0 ? (
+                      <Link href={`/jobs/${categoryJobs[0]._id}`}>
+                        <div
+                          className={`rounded-lg p-6 border transition-all duration-300 hover:shadow-lg cursor-pointer
+                            flex items-center justify-between
+                            ${
+                              isActive
+                                ? "bg-indigo-600 border-indigo-600 text-white"
+                                : "bg-white border-gray-200 text-gray-900 hover:border-gray-300"
+                            }`}
+                        >
+                          {/* LEFT SIDE */}
+                          <div className="flex items-center gap-4">
+                            {/* ICON */}
+                            <div
+                              className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                                isActive ? "bg-white/20" : "bg-gray-100"
+                              }`}
+                            >
+                              <Icon
+                                className={`w-5 h-5 ${
+                                  isActive ? "text-white" : "text-indigo-600"
+                                }`}
+                                strokeWidth={1.5}
+                              />
+                            </div>
+
+                            {/* TEXT */}
+                            <div>
+                              <h3 className="font-bold text-base">
+                                {category.name}
+                              </h3>
+                              <p
+                                className={`text-sm ${
+                                  isActive ? "text-white/80" : "text-gray-600"
+                                }`}
+                              >
+                                {category.count} jobs available
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* RIGHT SIDE ARROW */}
+                          <MoveRight
+                            size={18}
+                            className={`${isActive ? "text-white/80" : "text-gray-400"}`}
+                          />
+                        </div>
+                      </Link>
+                    ) : (
                       <div
-                        className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                          isActive ? "bg-white/20" : "bg-gray-100"
-                        }`}
-                      >
-                        <Icon
-                          className={`w-5 h-5 ${
-                            isActive ? "text-white" : "text-indigo-600"
+                        className={`rounded-lg p-6 border transition-all duration-300
+                          flex items-center justify-between
+                          ${
+                            isActive
+                              ? "bg-indigo-600 border-indigo-600 text-white"
+                              : "bg-white border-gray-200 text-gray-900"
                           }`}
-                          strokeWidth={1.5}
+                      >
+                        {/* LEFT SIDE */}
+                        <div className="flex items-center gap-4">
+                          {/* ICON */}
+                          <div
+                            className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                              isActive ? "bg-white/20" : "bg-gray-100"
+                            }`}
+                          >
+                            <Icon
+                              className={`w-5 h-5 ${
+                                isActive ? "text-white" : "text-indigo-600"
+                              }`}
+                              strokeWidth={1.5}
+                            />
+                          </div>
+
+                          {/* TEXT */}
+                          <div>
+                            <h3 className="font-bold text-base">
+                              {category.name}
+                            </h3>
+                            <p
+                              className={`text-sm ${
+                                isActive ? "text-white/80" : "text-gray-600"
+                              }`}
+                            >
+                              {category.count} jobs available
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* RIGHT SIDE ARROW */}
+                        <MoveRight
+                          size={18}
+                          className={`${isActive ? "text-white/80" : "text-gray-400"}`}
                         />
                       </div>
-
-                      {/* TEXT */}
-                      <div>
-                        <h3 className="font-bold text-base">{category.name}</h3>
-                        <p
-                          className={`text-sm ${
-                            isActive ? "text-white/80" : "text-gray-600"
-                          }`}
-                        >
-                          {category.count} jobs available
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* RIGHT SIDE ARROW */}
-                    <MoveRight
-                      size={18}
-                      className={`${isActive ? "text-white/80" : "text-gray-400"}`}
-                    />
+                    )}
                   </div>
                 );
               })}
             </div>
 
-            {/* Desktop Layout (with cards) */}
+            {/* Desktop Layout */}
             <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {categories.map((category: CategoryData) => {
                 const Icon = iconMap[category.name] || Briefcase;
                 const isActive = category.isActive;
 
-                return (
-                  <div
-                    key={category.name}
-                    className={`rounded-lg p-6 border transition-all duration-300 hover:shadow-lg cursor-pointer
-    flex flex-col items-start justify-between
-    ${
-      isActive
-        ? "bg-indigo-600 border-indigo-600 text-white"
-        : "bg-white border-gray-200 text-gray-900 hover:border-gray-300"
-    }`}
-                  >
-                    {/* ICON */}
-                    <div
-                      className={`w-12 h-12 rounded-lg flex items-center justify-center mb-4 ${
-                        isActive ? "bg-white/20" : "bg-gray-100"
-                      }`}
-                    >
-                      <Icon
-                        className={`w-6 h-6 ${
-                          isActive ? "text-white" : "text-indigo-600"
-                        }`}
-                        strokeWidth={1.5}
-                      />
-                    </div>
+                // Find jobs in this category
+                const categoryJobs = jobs.filter(
+                  (job: Job) => job.category === category.name,
+                );
 
-                    {/* TEXT */}
-                    <div className="flex-grow">
-                      <h3 className="font-bold text-lg mb-2">
-                        {category.name}
-                      </h3>
-                      <div className="flex items-center gap-x-3">
-                        <p
-                          className={`text-sm ${
-                            isActive ? "text-white/80" : "text-gray-600"
-                          }`}
+                return (
+                  <div key={category.name}>
+                    {categoryJobs.length > 0 ? (
+                      <Link href={`/jobs/${categoryJobs[0]._id}`}>
+                        <div
+                          className={`rounded-lg p-6 border transition-all duration-300 hover:shadow-lg cursor-pointer
+                            flex flex-col items-start justify-between h-full
+                            ${
+                              isActive
+                                ? "bg-indigo-600 border-indigo-600 text-white"
+                                : "bg-white border-gray-200 text-gray-900 hover:border-gray-300"
+                            }`}
                         >
-                          {category.count} jobs available
-                        </p>
-                        <span className="hidden md:block">
+                          {/* ICON */}
+                          <div
+                            className={`w-12 h-12 rounded-lg flex items-center justify-center mb-4 ${
+                              isActive ? "bg-white/20" : "bg-gray-100"
+                            }`}
+                          >
+                            <Icon
+                              className={`w-6 h-6 ${
+                                isActive ? "text-white" : "text-indigo-600"
+                              }`}
+                              strokeWidth={1.5}
+                            />
+                          </div>
+
+                          {/* TEXT */}
+                          <div className="flex-grow w-full">
+                            <h3 className="font-bold text-lg mb-2">
+                              {category.name}
+                            </h3>
+                            <div className="flex items-center justify-between gap-x-3">
+                              <p
+                                className={`text-sm ${
+                                  isActive ? "text-white/80" : "text-gray-600"
+                                }`}
+                              >
+                                {category.count} jobs available
+                              </p>
+                              <span className="hidden md:block">
+                                <MoveRight
+                                  size={18}
+                                  className={`font-bold ${
+                                    isActive ? "text-white/80" : "text-gray-400"
+                                  }`}
+                                />
+                              </span>
+                            </div>
+                          </div>
+
                           <MoveRight
                             size={18}
-                            className={`font-bold ${isActive ? "text-white/80" : "text-gray-400"}`}
+                            className={`md:hidden block mt-4 ${
+                              isActive ? "text-white/80" : "text-gray-400"
+                            }`}
                           />
-                        </span>
-                      </div>
-                    </div>
+                        </div>
+                      </Link>
+                    ) : (
+                      <div
+                        className={`rounded-lg p-6 border transition-all duration-300
+                          flex flex-col items-start justify-between h-full
+                          ${
+                            isActive
+                              ? "bg-indigo-600 border-indigo-600 text-white"
+                              : "bg-white border-gray-200 text-gray-900"
+                          }`}
+                      >
+                        {/* ICON */}
+                        <div
+                          className={`w-12 h-12 rounded-lg flex items-center justify-center mb-4 ${
+                            isActive ? "bg-white/20" : "bg-gray-100"
+                          }`}
+                        >
+                          <Icon
+                            className={`w-6 h-6 ${
+                              isActive ? "text-white" : "text-indigo-600"
+                            }`}
+                            strokeWidth={1.5}
+                          />
+                        </div>
 
-                    <MoveRight
-                      size={18}
-                      className={`md:hidden block mt-4 ${isActive ? "text-white/80" : "text-gray-400"}`}
-                    />
+                        {/* TEXT */}
+                        <div className="flex-grow w-full">
+                          <h3 className="font-bold text-lg mb-2">
+                            {category.name}
+                          </h3>
+                          <div className="flex items-center justify-between gap-x-3">
+                            <p
+                              className={`text-sm ${
+                                isActive ? "text-white/80" : "text-gray-600"
+                              }`}
+                            >
+                              {category.count} jobs available
+                            </p>
+                            <span className="hidden md:block">
+                              <MoveRight
+                                size={18}
+                                className={`font-bold ${
+                                  isActive ? "text-white/80" : "text-gray-400"
+                                }`}
+                              />
+                            </span>
+                          </div>
+                        </div>
+
+                        <MoveRight
+                          size={18}
+                          className={`md:hidden block mt-4 ${
+                            isActive ? "text-white/80" : "text-gray-400"
+                          }`}
+                        />
+                      </div>
+                    )}
                   </div>
                 );
               })}

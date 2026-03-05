@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
@@ -31,34 +32,39 @@ export default function JobSearch({
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
   const router = useRouter();
-  const [searchTerm, setSearchTerm] = useState(searchParams?.search || "");
-  const [location, setLocation] = useState(searchParams?.location || "all");
+
+  // Handle searchParams safely
+  const initialSearch =
+    typeof searchParams?.search === "string" ? searchParams.search : "";
+  const initialLocation =
+    typeof searchParams?.location === "string" ? searchParams.location : "all";
+
+  const [searchTerm, setSearchTerm] = useState(initialSearch);
+  const [location, setLocation] = useState(initialLocation);
   const [suggestions, setSuggestions] = useState<Job[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const suggestionsRef = useRef<HTMLDivElement>(null);
+  const searchTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   // Use useMemo to memoize locations - only recalculate when initialJobs changes
   const locations = useMemo(() => {
     return [...new Set(initialJobs.map((job: Job) => job.location))];
   }, [initialJobs]);
 
-  // Use useRef to track previous search term to prevent unnecessary updates
-  const previousSearchTerm = useRef(searchTerm);
-
-  // Filter jobs based on search term for suggestions - with proper dependencies
+  // Filter jobs based on search term for suggestions
   useEffect(() => {
-    // Only run if searchTerm has actually changed
-    if (previousSearchTerm.current === searchTerm) {
-      return;
+    // Clear previous timeout
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
     }
-    previousSearchTerm.current = searchTerm;
 
     if (searchTerm.trim().length > 0) {
-      setIsLoading(true);
-
       // Use a timeout to debounce the filtering
-      const timeoutId = setTimeout(() => {
+      searchTimeoutRef.current = setTimeout(() => {
+        // Set loading state inside the timeout callback
+        setIsLoading(true);
+
         // Filter jobs that match title, tags, or category
         const filtered = initialJobs
           .filter((job) => {
@@ -78,14 +84,19 @@ export default function JobSearch({
         setShowSuggestions(true);
         setIsLoading(false);
       }, 300); // Debounce for 300ms
-
-      return () => clearTimeout(timeoutId);
     } else {
       setSuggestions([]);
       setShowSuggestions(false);
       setIsLoading(false);
     }
-  }, [searchTerm, initialJobs]); // Keep dependencies, but added debounce and previous value check
+
+    // Cleanup timeout on unmount or when searchTerm changes
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, [searchTerm, initialJobs]); // Keep dependencies
 
   // Close suggestions when clicking outside
   useEffect(() => {
@@ -129,11 +140,11 @@ export default function JobSearch({
 
   return (
     <div className="w-full">
-      <div className=" md:w-[888px] relative ">
-        <div className="flex flex-col md:flex-row items-center bg-white shadow-lg rounded- overflow-hidden border border-gray-200">
+      <div className="md:w-[888px] relative">
+        <div className="flex flex-col md:flex-row items-center bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200">
           {/* Job Title Input with Suggestions */}
           <div className="flex items-center px-6 flex-1 py-4 min-w-0 relative">
-            <Search className="h-5 w-5  text-gray-400 mr-3 flex-shrink-0" />
+            <Search className="h-5 w-5 text-gray-400 mr-3 flex-shrink-0" />
             <Input
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -155,7 +166,7 @@ export default function JobSearch({
           </div>
 
           {/* Vertical Divider */}
-          <div className="md:h-12  bg-gray-200 flex-shrink-0" />
+          <div className="md:h-12 bg-gray-200 flex-shrink-0" />
 
           {/* Location Select */}
           <div className="mb-2 md:mb-0 flex items-center px-6 md:py-4 flex-shrink-0">
@@ -179,7 +190,7 @@ export default function JobSearch({
           {/* Search Button */}
           <Button
             onClick={handleSearch}
-            className="rounded-none h-full w-full md:w-auto  md:px-8 py-4 mr-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-base flex-shrink-0"
+            className="rounded-none h-full w-full md:w-auto md:px-8 py-4 mr-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-base flex-shrink-0"
           >
             Search my job
           </Button>

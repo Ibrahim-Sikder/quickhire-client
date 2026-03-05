@@ -19,8 +19,8 @@ export default function StartPosting() {
         >
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 items-center gap-12">
             {/* LEFT CONTENT */}
-            <div className="text-white max-w-xl space-y-6">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+            <div className="text-white text-center md:text-left max-w-xl space-y-6">
+              <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight">
                 Start posting
                 <br />
                 jobs today
@@ -30,17 +30,17 @@ export default function StartPosting() {
                 Start posting jobs for only $10.
               </p>
 
-              <Button className="bg-white text-indigo-600 hover:bg-gray-100 font-semibold px-8 py-6 rounded-lg text-base">
+              <Button className="bg-white w-full md:w-auto text-indigo-600 hover:bg-gray-100 font-semibold px-8 py-6 rounded-lg text-base">
                 Sign Up For Free
               </Button>
             </div>
 
             {/* RIGHT IMAGE */}
-            <div className="absolute right-5 z-10 top-5 flex justify-center lg:justify-end">
+            <div className="relative lg:absolute lg:right-5 lg:top-5 flex justify-center lg:justify-end md:mt-10 lg:mt-0">
               <Image
                 src={content}
                 alt="Dashboard Preview"
-                className="w-full max-w-xl drop-shadow-2xl"
+                className="w-full max-w-md lg:max-w-xl drop-shadow-2xl"
                 priority
               />
             </div>

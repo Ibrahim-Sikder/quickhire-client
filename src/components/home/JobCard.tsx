@@ -13,7 +13,7 @@ export default function JobCard({ job }: Props) {
 
   return (
     <div
-      className="flex gap-4 p-6 rounded-lg border border-slate-200 
+      className="flex md:flex-row flex-col gap-4 p-6 rounded-lg border border-slate-200 
       hover:border-slate-300 hover:shadow-md transition-all bg-white"
     >
       <CompanyIcon company={company} />
