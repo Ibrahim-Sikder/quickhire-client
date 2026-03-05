@@ -137,7 +137,6 @@ https://github.com/Ibrahim-Sikder/quickhire-client
 
 ## ✨ Author
 
-Ibrahim Sikder
-Frontend Developer
+Ibrahim Sikder (Frontend Developer)
 
 ---

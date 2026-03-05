@@ -148,7 +148,7 @@ export default function ApplicationsPage() {
     setIsLoading(true);
     try {
       const response = await axios.get<ApiResponse>(
-        `${process.env.NEXT_PUBLIC_BASE_URL}?page=${page}&limit=10`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/applications?page=${page}&limit=10`,
       );
 
       if (response.data.success) {
