@@ -2,17 +2,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState } from "react";
-import { Send, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { CompanyIcon } from "@/utils/companyIcon";
-import toast from "react-hot-toast";
 import {
   FormData,
   FormErrors,
   initialFormData,
   JobApplyProps,
 } from "@/types/jobApply";
+import { CompanyIcon } from "@/utils/companyIcon";
+import { Send, X } from "lucide-react";
+import { useState } from "react";
+import toast from "react-hot-toast";
 import JobApplicationForm from "./JobApplyForm";
 
 export default function JobApply({ job, isOpen, onClose }: JobApplyProps) {
