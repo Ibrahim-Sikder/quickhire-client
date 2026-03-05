@@ -1,36 +1,143 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# QuickHire – Job Listing Platform
 
-## Getting Started
+## 📖 Project Overview
 
-First, run the development server:
+QuickHire is a job listing platform where employers can create and manage job posts while candidates can browse jobs and apply. It includes admin job management, job details, and application handling.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## 🚀 Features
+
+- Job listing with filtering
+- Job details page
+- Apply to job functionality
+- Admin can create jobs
+- Admin can delete jobs
+- Admin dashboard
+- API integration with backend
+- Deployment-ready setup
+
+---
+
+## 🛠 Tech Stack
+
+- Next.js
+- Node.js
+- Express.js
+- MongoDB
+  \*Mongoose
+- Shadcn
+- Tailwind CSS
+- Axios
+- PM2 (Production)
+- Nginx (Deployment)
+
+---
+
+## ⚙ Environment Variables
+
+### 🔹 Create a `.env` file in the root:
+
+```
+NEXT_PUBLIC_BASE_URL=https://quickhire-api.anaadevelopersltd.com/api/v1
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 🔹 `.env.example`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+NODE_ENV=development
+PORT=5001
 
-## Learn More
+DATABASE_URL=mongodb+srv://nextAuth:nextAuth123@cluster0.fomplst.mongodb.net/quickhire?retryWrites=true&w=majority&appName=Cluster0
 
-To learn more about Next.js, take a look at the following resources:
+# Cloudinary
+CLOUDINARY_NAME=do2cbxkkj
+CLOUDINARY_API_KEY=581756315446585
+CLOUDINARY_SECRET=Q2IhMl_KosE4E2XPeGez8xrd6b0
+# CORS
+CROSS_ORIGIN_CLIENT=https://quickhire.anaadevelopersltd.com
+CROSS_ORIGIN_ADMIN_LOCALHOST=http://localhost:3000
+CROSS_ORIGIN_CLIENT_LOCALHOST=http://localhost:3001
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 💻 How to Run Locally
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 🔥 Frontend
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+git clone https://github.com/yourusername/quickhire.git
+cd quickhire
+npm install
+npm run dev
+```
+
+Open: `http://localhost:3000`
+
+---
+
+### 🔥 Backend
+
+```bash
+cd backend
+npm install
+npm run dev
+```
+
+---
+
+## 🌍 Live Deployment
+
+Frontend:
+
+```
+https://quickhire.anaadevelopersltd.com
+```
+
+Backend:
+
+```
+https://quickhire-api.anaadevelopersltd.com
+```
+
+---
+
+## 🎥 Demo Video
+
+Demo (3–5 Minutes):
+
+```
+https://loom.com/-link
+```
+
+### Demo Should Cover:
+
+- Job listing
+- Job details
+- Applying to a job
+- Admin login
+- Admin create job
+- Admin delete job
+
+---
+
+## 📦 Repository
+
+GitHub:
+
+```
+https://github.com/Ibrahim-Sikder/quickhire-client
+```
+
+---
+
+## ✨ Author
+
+Ibrahim Sikder
+Frontend Developer
+
+---
