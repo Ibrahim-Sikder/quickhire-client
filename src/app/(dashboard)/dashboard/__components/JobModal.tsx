@@ -677,9 +677,9 @@ export default function JobAddModal({
         category: jobToEdit.category,
         description: jobToEdit.description,
         tags: jobToEdit.tags,
-        featured: jobToEdit.featured,
-        latest: jobToEdit.latest,
-        isActive: jobToEdit.isActive,
+        featured: jobToEdit.featured || false,
+        latest: jobToEdit.latest !== undefined ? jobToEdit.latest : true,
+        isActive: jobToEdit.isActive !== undefined ? jobToEdit.isActive : true,
       });
     } else {
       // Reset form when adding new
@@ -1023,7 +1023,7 @@ export default function JobAddModal({
                 </div>
                 <Switch
                   checked={formData.featured}
-                  onCheckedChange={(checked) =>
+                  onCheckedChange={(checked: boolean) =>
                     setFormData({ ...formData, featured: checked })
                   }
                   className="data-[state=checked]:bg-yellow-600"
@@ -1040,7 +1040,7 @@ export default function JobAddModal({
                 </div>
                 <Switch
                   checked={formData.latest}
-                  onCheckedChange={(checked) =>
+                  onCheckedChange={(checked: boolean) =>
                     setFormData({ ...formData, latest: checked })
                   }
                   className="data-[state=checked]:bg-purple-600"
@@ -1058,7 +1058,7 @@ export default function JobAddModal({
               </div>
               <Switch
                 checked={formData.isActive}
-                onCheckedChange={(checked) =>
+                onCheckedChange={(checked: boolean) =>
                   setFormData({ ...formData, isActive: checked })
                 }
                 className="data-[state=checked]:bg-green-600"
