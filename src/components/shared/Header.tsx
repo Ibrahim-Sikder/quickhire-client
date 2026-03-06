@@ -18,12 +18,13 @@ export default function Header() {
     <header className="sticky top-0 z-50 bg-[#F8F8FD]">
       <div className="container w-full max-w-[1300px] mx-auto flex items-center justify-between h-16 px-6">
         {/* Logo - Visible on all devices */}
-        <div className="flex items-center gap-2">
-          <Link href="/">
+        <Link href="/">
+          <div className="flex items-center gap-2">
             <Image height={30} width={30} src={logo} alt="logo" />
-          </Link>
-          <span className="font-bold text-xl text-[#25324B]">QuickHire</span>
-        </div>
+
+            <span className="font-bold text-2xl text-[#25324B]">QuickHire</span>
+          </div>
+        </Link>
 
         {/* Desktop Navigation - Hidden on mobile */}
         <nav className="hidden md:flex items-center gap-8 flex-1 justify-center font-medium text-gray-700">

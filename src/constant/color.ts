@@ -29,3 +29,10 @@ export const STAT_CARDS = [
     gradient: "from-orange-500 to-orange-600",
   },
 ] as const;
+export const JOBCOLORS = {
+  primary: "#4640de",
+  secondary: "#26A4FF",
+  primaryLight: "rgba(70, 64, 222, 0.1)",
+  secondaryLight: "rgba(38, 164, 255, 0.1)",
+  gradient: "linear-gradient(135deg, #4640de 0%, #26A4FF 100%)",
+} as const;

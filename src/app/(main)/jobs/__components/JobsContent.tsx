@@ -5,21 +5,21 @@ import { useSearchParams } from "next/navigation";
 import JobSearch from "@/components/home/JobSearch";
 import JobCard from "@/components/Jobs/JobCard";
 import JobFilters from "@/components/Jobs/JobFilter";
-import { Filters, INITIAL_STATE, Job } from "@/types/job";
+import { Filters, Job } from "@/types/job";
+import Container from "@/components/shared/Container";
+import { JOBCOLORS } from "@/constant/color";
 
 export default function JobsContent() {
   const searchParams = useSearchParams();
 
-  // Convert URLSearchParams to plain object for JobSearch component
+  // URL params to object
   const searchParamsObject = useMemo(() => {
-    const params: { [key: string]: string } = {};
-    searchParams.forEach((value, key) => {
-      params[key] = value;
-    });
+    const params: Record<string, string> = {};
+    searchParams.forEach((value, key) => (params[key] = value));
     return params;
   }, [searchParams]);
 
-  // State with proper initialization
+  // State
   const [jobs, setJobs] = useState<Job[]>([]);
   const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
@@ -27,7 +27,7 @@ export default function JobsContent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Get current filters from URL
+  // Get current filters
   const currentFilters: Filters = useMemo(
     () => ({
       search: searchParams.get("search"),
@@ -37,19 +37,19 @@ export default function JobsContent() {
     [searchParams],
   );
 
-  // Check if any filters are active
-  const hasActiveFilters = useMemo(() => {
-    return Boolean(
-      currentFilters.search ||
-      (currentFilters.location && currentFilters.location !== "all") ||
-      (currentFilters.category && currentFilters.category !== "all"),
-    );
-  }, [currentFilters]);
+  const hasActiveFilters = useMemo(
+    () =>
+      Boolean(
+        currentFilters.search ||
+        (currentFilters.location && currentFilters.location !== "all") ||
+        (currentFilters.category && currentFilters.category !== "all"),
+      ),
+    [currentFilters],
+  );
 
-  // Build API query params
-  const buildQueryParams = useCallback((): URLSearchParams => {
+  // Build query params
+  const buildQueryParams = useCallback(() => {
     const params = new URLSearchParams();
-
     if (currentFilters.search) params.set("search", currentFilters.search);
     if (currentFilters.location && currentFilters.location !== "all") {
       params.set("location", currentFilters.location);
@@ -57,69 +57,47 @@ export default function JobsContent() {
     if (currentFilters.category && currentFilters.category !== "all") {
       params.set("category", currentFilters.category);
     }
-
     return params;
   }, [currentFilters]);
 
-  // Extract unique values from jobs
+  // Extract unique values
   const extractUniqueValues = useCallback((jobsData: Job[]) => {
-    if (!jobsData || jobsData.length === 0) return;
-
-    const uniqueCategories = [
-      ...new Set(jobsData.map((job) => job.category).filter(Boolean)),
-    ];
-
-    const uniqueLocations = [
-      ...new Set(jobsData.map((job) => job.location).filter(Boolean)),
-    ];
-
-    setCategories(uniqueCategories);
-    setLocations(uniqueLocations);
+    if (!jobsData.length) return;
+    setCategories([
+      ...new Set(jobsData.map((j) => j.category).filter(Boolean)),
+    ]);
+    setLocations([...new Set(jobsData.map((j) => j.location).filter(Boolean))]);
   }, []);
 
-  // Fetch jobs from API
+  // Fetch jobs
   const fetchJobs = useCallback(async () => {
     const params = buildQueryParams();
-    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/jobs${
-      params.toString() ? `?${params.toString()}` : ""
-    }`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/jobs${params.toString() ? `?${params}` : ""}`;
 
     try {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(url, {
-        cache: "no-store",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const res = await fetch(url, { cache: "no-store" });
+      if (!res.ok) throw new Error(`Failed to fetch jobs`);
 
-      if (!response.ok) {
-        throw new Error(`Failed to fetch jobs: ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      // Handle different API response structures
+      const data = await res.json();
       const jobsData = data?.data?.jobs ?? data?.jobs ?? data ?? [];
 
       if (Array.isArray(jobsData)) {
         setJobs(jobsData);
         extractUniqueValues(jobsData);
       } else {
-        console.error("Unexpected data format:", data);
         setJobs([]);
       }
     } catch (err) {
-      console.error("Error fetching jobs:", err);
       setError(err instanceof Error ? err.message : "Failed to fetch jobs");
     } finally {
       setLoading(false);
     }
   }, [buildQueryParams, extractUniqueValues]);
 
-  // Apply client-side filtering
+  // Apply filters
   const applyFilters = useCallback(() => {
     if (!jobs.length) {
       setFilteredJobs([]);
@@ -127,32 +105,27 @@ export default function JobsContent() {
     }
 
     let filtered = [...jobs];
+    const { search, location, category } = currentFilters;
 
-    // Apply search filter
-    if (currentFilters.search) {
-      const searchLower = currentFilters.search.toLowerCase();
+    if (search) {
+      const searchLower = search.toLowerCase();
       filtered = filtered.filter(
         (job) =>
           job.title?.toLowerCase().includes(searchLower) ||
-          job.description?.toLowerCase().includes(searchLower) ||
           job.company?.toLowerCase().includes(searchLower) ||
           job.tags?.some((tag) => tag.toLowerCase().includes(searchLower)),
       );
     }
 
-    // Apply location filter
-    if (currentFilters.location && currentFilters.location !== "all") {
-      const locationLower = currentFilters.location.toLowerCase();
+    if (location && location !== "all") {
       filtered = filtered.filter((job) =>
-        job.location?.toLowerCase().includes(locationLower),
+        job.location?.toLowerCase().includes(location.toLowerCase()),
       );
     }
 
-    // Apply category filter
-    if (currentFilters.category && currentFilters.category !== "all") {
-      const categoryLower = currentFilters.category.toLowerCase();
+    if (category && category !== "all") {
       filtered = filtered.filter((job) =>
-        job.category?.toLowerCase().includes(categoryLower),
+        job.category?.toLowerCase().includes(category.toLowerCase()),
       );
     }
 
@@ -168,16 +141,19 @@ export default function JobsContent() {
     applyFilters();
   }, [applyFilters]);
 
-  // Debug logs
-  useEffect(() => {}, [jobs, filteredJobs]);
-
   // Loading state
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin mx-auto" />
-          <p className="mt-4 text-gray-600 font-medium">Loading jobs...</p>
+          <div
+            className="w-16 h-16 border-4 rounded-full animate-spin mx-auto"
+            style={{
+              borderColor: JOBCOLORS.primaryLight,
+              borderTopColor: JOBCOLORS.primary,
+            }}
+          />
+          <p className="mt-4 text-gray-600">Loading jobs...</p>
         </div>
       </div>
     );
@@ -188,10 +164,11 @@ export default function JobsContent() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center max-w-md mx-auto p-6">
-          <div className="text-red-600 mb-4 text-lg">⚠️ {error}</div>
+          <p className="text-red-600 mb-4">⚠️ {error}</p>
           <button
             onClick={() => window.location.reload()}
-            className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200"
+            className="px-6 py-2 text-white rounded-lg transition-colors"
+            style={{ backgroundColor: JOBCOLORS.primary }}
           >
             Try Again
           </button>
@@ -200,84 +177,95 @@ export default function JobsContent() {
     );
   }
 
-  // Active filters display
-  const renderActiveFilters = () => {
-    if (!hasActiveFilters) return null;
-
-    const parts = [];
-    if (currentFilters.search) {
-      parts.push(`"${currentFilters.search}"`);
-    }
-    if (currentFilters.location && currentFilters.location !== "all") {
-      parts.push(currentFilters.location);
-    }
-    if (currentFilters.category && currentFilters.category !== "all") {
-      parts.push(currentFilters.category);
-    }
-
-    return (
-      <span className="text-sm text-gray-500">
-        Filtered by: {parts.join(" • ")}
-      </span>
-    );
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/30">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white">
+    <div
+      className="min-h-screen"
+      style={{
+        background: `linear-gradient(135deg, #f8fafc 0%, ${JOBCOLORS.secondaryLight} 100%)`,
+      }}
+    >
+      {/* Hero */}
+      <section
+        className="text-white"
+        style={{ background: JOBCOLORS.gradient }}
+      >
         <div className="container mx-auto px-4 py-12 md:py-16">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-3 md:mb-4">
+          <h1 className="text-3xl md:text-5xl font-bold text-center mb-4">
             Find Your Dream Job Today
           </h1>
-          <p className="text-lg md:text-xl text-center text-indigo-100 mb-6 md:mb-8 px-2">
+          <p className="text-lg md:text-xl text-center text-indigo-100 mb-8">
             Discover thousands of job opportunities with top companies
           </p>
           <JobSearch initialJobs={jobs} searchParams={searchParamsObject} />
         </div>
       </section>
 
-      {/* Main Content */}
-      <section className="container mx-auto px-4 py-6 md:py-8">
-        <div className="flex flex-col lg:flex-row gap-6 md:gap-8">
-          {/* Filters Sidebar */}
-          <aside className="lg:w-80">
-            <div className="sticky top-4">
-              <JobFilters categories={categories} locations={locations} />
-            </div>
-          </aside>
-
-          {/* Jobs Grid */}
-          <main className="flex-1">
-            {/* Results Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
-              <h2 className="text-xl md:text-2xl font-bold text-gray-800">
-                {filteredJobs.length} Job{filteredJobs.length !== 1 ? "s" : ""}{" "}
-                Found
-              </h2>
-              {renderActiveFilters()}
-            </div>
-
-            {/* Job Cards */}
-            {filteredJobs.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                {filteredJobs.map((job) => (
-                  <JobCard key={job._id} job={job} />
-                ))}
+      {/* Main */}
+      <Container>
+        <section className="px-4 py-8">
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* Sidebar */}
+            <aside className="lg:w-80">
+              <div className="sticky top-4">
+                <JobFilters categories={categories} locations={locations} />
               </div>
-            ) : (
-              <div className="text-center py-12 md:py-16 bg-white rounded-xl shadow-sm">
-                <h3 className="text-xl md:text-2xl font-semibold text-gray-700 mb-2">
-                  No Jobs Found
-                </h3>
-                <p className="text-gray-500 px-4">
-                  Try adjusting your search or filters
-                </p>
+            </aside>
+
+            {/* Content */}
+            <main className="flex-1">
+              {/* Header */}
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl md:text-2xl font-bold text-gray-800">
+                  <span style={{ color: JOBCOLORS.primary }}>
+                    {filteredJobs.length}
+                  </span>{" "}
+                  Job
+                  {filteredJobs.length !== 1 ? "s" : ""} Found
+                </h2>
+                {hasActiveFilters && (
+                  <span className="text-sm text-gray-500">
+                    Filtered by:{" "}
+                    {[
+                      currentFilters.search && `"${currentFilters.search}"`,
+                      currentFilters.location !== "all" &&
+                        currentFilters.location,
+                      currentFilters.category !== "all" &&
+                        currentFilters.category,
+                    ]
+                      .filter(Boolean)
+                      .join(" • ")}
+                  </span>
+                )}
               </div>
-            )}
-          </main>
-        </div>
-      </section>
+
+              {/* Jobs Grid */}
+              {filteredJobs.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {filteredJobs.map((job) => (
+                    <JobCard key={job._id} job={job} />
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-16 bg-white rounded-xl shadow-sm">
+                  <h3 className="text-xl font-semibold text-gray-700 mb-2">
+                    No Jobs Found
+                  </h3>
+                  <p className="text-gray-500 mb-4">
+                    Try adjusting your search or filters
+                  </p>
+                  <button
+                    onClick={() => window.history.pushState({}, "", "/jobs")}
+                    className="px-6 py-2 text-white rounded-lg transition-colors"
+                    style={{ backgroundColor: JOBCOLORS.primary }}
+                  >
+                    Clear Filters
+                  </button>
+                </div>
+              )}
+            </main>
+          </div>
+        </section>
+      </Container>
     </div>
   );
 }

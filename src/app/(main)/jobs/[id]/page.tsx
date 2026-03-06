@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import JobApply from "../__components/JobApply";
+import { renderContent } from "@/utils/renderContent";
 
 export default function JobDetailPage() {
   const { id } = useParams();
@@ -258,7 +259,7 @@ export default function JobDetailPage() {
                 Job Description
               </h2>
               <div className="prose max-w-none text-slate-600 whitespace-pre-line text-sm md:text-base">
-                {job.description}
+                {renderContent(job.description)}
               </div>
             </div>
 
