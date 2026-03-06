@@ -64,7 +64,7 @@ export default function Header() {
         <div className="md:hidden bg-white border-t border-gray-200">
           <nav className="flex flex-col items-start gap-4 px-6 py-4 font-medium text-gray-700">
             <Link
-              href="#"
+              href="/jobs"
               className="hover:text-gray-900 transition w-full"
               onClick={() => setIsMenuOpen(false)}
             >
