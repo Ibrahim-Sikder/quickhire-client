@@ -131,8 +131,6 @@ export default function JobAddModal({
   const [tagInput, setTagInput] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // REMOVED: useEditor hook from here. The editor is now fully managed by RichTextEditor.
-
   // Reset form when modal opens/closes or jobToEdit changes
   useEffect(() => {
     if (isOpen) {
@@ -164,7 +162,7 @@ export default function JobAddModal({
       }
       setTagInput("");
     }
-  }, [jobToEdit, isOpen]); // Removed 'editor' from dependencies as it no longer exists here
+  }, [jobToEdit, isOpen]);
 
   const handleAddTag = () => {
     if (tagInput.trim() && !formData.tags.includes(tagInput.trim())) {
@@ -183,8 +181,13 @@ export default function JobAddModal({
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // FIX: Made 'e' optional (e?) to satisfy QuickHireModal's () => void requirement
+  // while still working with the <form> submit event.
+  const handleSubmit = async (e?: React.FormEvent) => {
+    // Prevent default only if the event exists (i.e., called from Form)
+    if (e) {
+      e.preventDefault();
+    }
 
     if (
       !formData.title ||
@@ -246,7 +249,7 @@ export default function JobAddModal({
       size="5xl"
       submitText={jobToEdit ? "Update Job" : "Create Job"}
       isSubmitting={isSubmitting}
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit} // No type error now
     >
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Information */}
@@ -331,7 +334,6 @@ export default function JobAddModal({
         {/* Description */}
         <div className="space-y-4">
           <h3 className="font-medium text-[#4640de]">Job Description *</h3>
-          {/* Simply pass the state value and the updater */}
           <RichTextEditor
             value={formData.description}
             onChange={(value) =>
