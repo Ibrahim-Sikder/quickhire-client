@@ -3,6 +3,7 @@ import { getJobs } from "@/lib/getJobs";
 import { CategoryData, iconMap, Job } from "@/types/job";
 import { Briefcase, MoveRight } from "lucide-react";
 import Link from "next/link";
+import Container from "../shared/Container";
 
 export default async function ExploreCategory() {
   const jobs = await getJobs();
@@ -34,11 +35,11 @@ export default async function ExploreCategory() {
   }
 
   return (
-    <section className="bg-white mb-20">
-      <div className="container max-w-7xl mx-auto px-6">
+    <section className="bg-background  mt-8 md:mt-16">
+      <Container>
         {/* Header */}
-        <div className="flex justify-between items-center mb-12">
-          <h2 className="text-2xl md:text-4xl font-bold">
+        <div className="flex justify-between items-center mb-5 md:mb-12">
+          <h2 className="text-3xl md:text-5xl font-bold">
             Explore by <span className="text-accent">category</span>
           </h2>
 
@@ -304,7 +305,7 @@ export default async function ExploreCategory() {
             </div>
           </>
         )}
-      </div>
+      </Container>
     </section>
   );
 }

@@ -15,10 +15,12 @@ export default function TrustedCompanies() {
 
   return (
     <Container>
-      <section className="bg-white py-8 md:py-14 border-gray-200">
-        <p className="text-[#7C8493] text-sm mb-6 ">Companies we help grow.</p>
+      <section className="bg-background mt-8 md:mt-16 border-gray-200">
+        <p className="text-muted-foreground text-sm mb-6 ">
+          Companies we help grow.
+        </p>
 
-        <div className="flex flex-wrap items-center  sm:justify-between gap-6">
+        <div className="flex flex-wrap items-center  justify-between sm:justify-center gap-6">
           {companies.map((c, i) => (
             <div
               key={i}

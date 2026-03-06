@@ -2,11 +2,12 @@ import { Button } from "@/components/ui/button";
 import content from "@/assets/posting/Content.png";
 import bg from "@/assets/posting/Rectangle.png";
 import Image from "next/image";
+import Container from "../shared/Container";
 
 export default function StartPosting() {
   return (
-    <section className="">
-      <div className="container max-w-7xl mx-auto ">
+    <section className=" mt-8 md:mt-16">
+      <Container>
         <div
           className="relative  overflow-hidden w-full startPosting px-8 py-14 "
           style={{
@@ -46,7 +47,7 @@ export default function StartPosting() {
             </div>
           </div>
         </div>
-      </div>
+      </Container>
     </section>
   );
 }

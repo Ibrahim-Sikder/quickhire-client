@@ -185,7 +185,7 @@ export default function JobApply({ job, isOpen, onClose }: JobApplyProps) {
       return `${baseClass} border-red-300 focus:border-red-500 focus:ring-red-500`;
     if (isValid)
       return `${baseClass} border-green-300 focus:border-green-500 focus:ring-green-500`;
-    return `${baseClass} border-slate-200 focus:border-indigo-500 focus:ring-indigo-500`;
+    return `${baseClass} border-border focus:border-primary focus:ring-primary`;
   };
 
   if (!isOpen) return null;
@@ -199,30 +199,21 @@ export default function JobApply({ job, isOpen, onClose }: JobApplyProps) {
       size="md"
       showFooter={false}
     >
-      {/* Header with Company Icon */}
-      <div className="flex items-center gap-3 mb-6 -mt-2">
-        <CompanyIcon company={job.company} />
-        <div className="flex-1 min-w-0">
-          <h2 className="text-xl font-bold text-slate-900 truncate">
-            {job.title}
-          </h2>
-          <p className="text-sm text-slate-600 truncate">{job.company}</p>
-        </div>
-      </div>
-
       {/* Success State */}
       {isSuccess ? (
         <div className="text-center py-8">
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Send className="h-8 w-8 text-green-600" />
           </div>
-          <h3 className="text-xl font-semibold text-slate-900 mb-2">
+          <h3 className="text-xl font-semibold text-foreground mb-2">
             Application Submitted!
           </h3>
-          <p className="text-slate-600">We'll notify you of any updates.</p>
+          <p className="text-muted-foreground">
+            We'll notify you of any updates.
+          </p>
           <Button
             onClick={handleClose}
-            className="mt-4 bg-primary hover:bg-primary/90 text-white"
+            className="mt-4 bg-primary hover:bg-primary/90 text-primary-foreground"
           >
             Close
           </Button>

@@ -50,7 +50,7 @@ const FORM_FIELDS: FormField[] = [
     placeholder: "Why are you the best candidate? (Minimum 20 characters)",
     component: Textarea,
     helperText: null,
-    rows: 4, // This now works with proper typing
+    rows: 4,
   },
 ];
 
@@ -94,7 +94,7 @@ export default function JobApplicationForm({
 
         return (
           <div key={field.name}>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label className="block text-sm font-medium text-foreground mb-1">
               {field.label} <span className="text-red-500">*</span>
             </label>
 
@@ -103,7 +103,9 @@ export default function JobApplicationForm({
             {hasError ? (
               <p className="mt-1 text-xs text-red-500">{errors[field.name]}</p>
             ) : showHelperText ? (
-              <p className="mt-1 text-xs text-slate-500">{field.helperText}</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {field.helperText}
+              </p>
             ) : null}
           </div>
         );
@@ -113,7 +115,7 @@ export default function JobApplicationForm({
       <Button
         type="submit"
         disabled={isSubmitting}
-        className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-3 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-3 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] disabled:hover:scale-100"
       >
         {isSubmitting ? "Submitting..." : "Submit Application"}
       </Button>
