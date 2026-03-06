@@ -207,7 +207,7 @@ export default function Footer() {
             {/* Newsletter */}
             <div className="space-y-4">
               <h4 className="font-bold text-primary-foreground text-lg">
-                Get job notification{" "}
+                Get Job Notification{" "}
               </h4>
               <p className="text-sm text-muted-foreground font-medium leading-relaxed">
                 The latest job news, articles, sent to your inbox weekly.
