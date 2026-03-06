@@ -41,7 +41,7 @@ export interface Job {
   jobType?: string;
   applicants?: number;
   benefits?: string[];
-  isActive?: boolean;
+  isActive: boolean;
 }
 export interface ApplyFormData {
   name: string;
@@ -101,4 +101,33 @@ export interface CategoryData {
   name: string;
   count: number;
   isActive: boolean;
+}
+
+// interface Job {
+//   _id: string;
+//   title: string;
+//   company: string;
+//   location: string;
+//   category: string;
+//   description: string;
+//   tags: string[];
+//   featured: boolean;
+//   latest: boolean;
+//   isActive: boolean;
+//   createdAt: string;
+//   updatedAt: string;
+// }
+
+export interface ApiResponse {
+  success: boolean;
+  message: string;
+  data: {
+    meta: {
+      page: number;
+      limit: number;
+      total: number;
+      totalPage: number;
+    };
+    jobs: Job[];
+  };
 }

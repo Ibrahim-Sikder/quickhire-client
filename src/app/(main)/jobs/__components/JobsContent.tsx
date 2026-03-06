@@ -84,8 +84,6 @@ export default function JobsContent() {
       params.toString() ? `?${params.toString()}` : ""
     }`;
 
-    console.log("Fetching jobs from:", url); // Debug log
-
     try {
       setLoading(true);
       setError(null);
@@ -102,7 +100,6 @@ export default function JobsContent() {
       }
 
       const data = await response.json();
-      console.log("API Response:", data); // Debug log
 
       // Handle different API response structures
       const jobsData = data?.data?.jobs ?? data?.jobs ?? data ?? [];
@@ -172,10 +169,7 @@ export default function JobsContent() {
   }, [applyFilters]);
 
   // Debug logs
-  useEffect(() => {
-    console.log("Jobs state:", jobs);
-    console.log("Filtered jobs:", filteredJobs);
-  }, [jobs, filteredJobs]);
+  useEffect(() => {}, [jobs, filteredJobs]);
 
   // Loading state
   if (loading) {

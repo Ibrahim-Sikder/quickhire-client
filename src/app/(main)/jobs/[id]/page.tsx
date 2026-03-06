@@ -44,7 +44,6 @@ export default function JobDetailPage() {
         }
 
         const result = await response.json();
-        console.log("API Response:", result);
 
         // Extract job data from the response structure
         const jobData = result?.data;

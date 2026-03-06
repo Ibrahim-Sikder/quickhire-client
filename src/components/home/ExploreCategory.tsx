@@ -33,8 +33,6 @@ export default async function ExploreCategory() {
     categories[2].isActive = true;
   }
 
-  console.log("job check", jobs);
-
   return (
     <section className="bg-white mb-20">
       <div className="container max-w-7xl mx-auto px-6">

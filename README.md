@@ -4,8 +4,6 @@
 
 QuickHire is a job listing platform where employers can create and manage job posts while candidates can browse jobs and apply. It includes admin job management, job details, and application handling.
 
----
-
 ## 🚀 Features
 
 - Job listing with filtering
@@ -90,19 +88,19 @@ npm run dev
 
 ---
 
-## 🌍 Live Deployment
+## Deployment
+
+The application is deployed on a VPS server using:
+
+- Nginx (Reverse Proxy)
+- PM2 (Process Manager)
+- Node.js Production Build
 
 Frontend:
-
-```
 https://quickhire.anaadevelopersltd.com
-```
 
-Backend:
-
-```
+Backend API:
 https://quickhire-api.anaadevelopersltd.com
-```
 
 ---
 

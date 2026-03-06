@@ -2,18 +2,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState } from "react";
-import { Send, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { CompanyIcon } from "@/utils/companyIcon";
-import toast from "react-hot-toast";
 import {
   FormData,
   FormErrors,
   initialFormData,
   JobApplyProps,
 } from "@/types/jobApply";
+import { CompanyIcon } from "@/utils/companyIcon";
+import { Send, X } from "lucide-react";
+import { useState } from "react";
+import toast from "react-hot-toast";
 import JobApplicationForm from "./JobApplyForm";
+import QuickHireModal from "@/components/shared/QuickHireModal";
+import { Button } from "@/components/ui/button";
 
 export default function JobApply({ job, isOpen, onClose }: JobApplyProps) {
   const [formData, setFormData] = useState<FormData>(initialFormData);
@@ -190,53 +191,55 @@ export default function JobApply({ job, isOpen, onClose }: JobApplyProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-2xl w-full max-w-md p-6 relative animate-fade-in border border-slate-200 max-h-[90vh] overflow-y-auto">
-        {/* Close Button */}
-        <button
-          onClick={handleClose}
-          className="absolute right-4 top-4 text-slate-400 hover:text-slate-600 p-1 rounded-full hover:bg-slate-100 transition-colors"
-          aria-label="Close"
-        >
-          <X className="h-5 w-5" />
-        </button>
-
-        {/* Header */}
-        <div className="flex items-center gap-3 mb-6">
-          <CompanyIcon company={job.company} />
-          <div className="flex-1 min-w-0">
-            <h2 className="text-xl font-bold text-slate-900 truncate">
-              {job.title}
-            </h2>
-            <p className="text-sm text-slate-600 truncate">{job.company}</p>
-          </div>
+    <QuickHireModal
+      isOpen={isOpen}
+      onClose={handleClose}
+      title={job.title}
+      description={job.company}
+      size="md"
+      showFooter={false}
+    >
+      {/* Header with Company Icon */}
+      <div className="flex items-center gap-3 mb-6 -mt-2">
+        <CompanyIcon company={job.company} />
+        <div className="flex-1 min-w-0">
+          <h2 className="text-xl font-bold text-slate-900 truncate">
+            {job.title}
+          </h2>
+          <p className="text-sm text-slate-600 truncate">{job.company}</p>
         </div>
-
-        {/* Success State */}
-        {isSuccess ? (
-          <div className="text-center py-8">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Send className="h-8 w-8 text-green-600" />
-            </div>
-            <h3 className="text-xl font-semibold text-slate-900 mb-2">
-              Application Submitted!
-            </h3>
-            <p className="text-slate-600">We'll notify you of any updates.</p>
-          </div>
-        ) : (
-          /* Form Component */
-          <JobApplicationForm
-            formData={formData}
-            errors={errors}
-            touched={touched}
-            isSubmitting={isSubmitting}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            onSubmit={handleSubmit}
-            getInputClassName={getInputClassName}
-          />
-        )}
       </div>
-    </div>
+
+      {/* Success State */}
+      {isSuccess ? (
+        <div className="text-center py-8">
+          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Send className="h-8 w-8 text-green-600" />
+          </div>
+          <h3 className="text-xl font-semibold text-slate-900 mb-2">
+            Application Submitted!
+          </h3>
+          <p className="text-slate-600">We'll notify you of any updates.</p>
+          <Button
+            onClick={handleClose}
+            className="mt-4 bg-[#4640de] hover:bg-[#4640de]/90 text-white"
+          >
+            Close
+          </Button>
+        </div>
+      ) : (
+        /* Form Component */
+        <JobApplicationForm
+          formData={formData}
+          errors={errors}
+          touched={touched}
+          isSubmitting={isSubmitting}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          onSubmit={handleSubmit}
+          getInputClassName={getInputClassName}
+        />
+      )}
+    </QuickHireModal>
   );
 }
