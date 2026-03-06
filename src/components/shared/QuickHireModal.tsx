@@ -75,7 +75,7 @@ export default function QuickHireModal({
       >
         <div className="p-6">
           <DialogHeader className="mb-4">
-            <DialogTitle className="text-[#4640de] text-xl font-semibold">
+            <DialogTitle className="text-primary text-xl font-semibold">
               {title}
             </DialogTitle>
             {description && (
@@ -103,7 +103,7 @@ export default function QuickHireModal({
                     type={onSubmit ? "button" : "submit"}
                     onClick={onSubmit}
                     disabled={isSubmitting}
-                    className="bg-[#4640de] hover:bg-[#4640de]/90 text-white min-w-[100px]"
+                    className="bg-primary hover:bg-primary/90 text-white min-w-[100px]"
                   >
                     {isSubmitting ? (
                       <div className="flex items-center justify-center gap-2">

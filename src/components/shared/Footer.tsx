@@ -15,7 +15,7 @@ export default function Footer() {
                 <Image height={30} width={30} src={logo} alt="logo" />
                 <span className="font-bold text-white text-2xl">QuickHire</span>
               </div>
-              <p className="text-sm text-gray-400 font-medium leading-relaxed">
+              <p className="text-sm text-muted-foreground font-medium leading-relaxed">
                 Great platform for the job seeker that passionate about
                 startups. Find your dream job easier.
               </p>
@@ -24,12 +24,14 @@ export default function Footer() {
             {/* About */}
             <div className="md:flex items-center justify-between  hidden ">
               <div className="space-y-4">
-                <h4 className="font-bold text-white text-lg">About</h4>
+                <h4 className="font-bold text-primary-foreground  text-lg">
+                  About
+                </h4>
                 <ul className="space-y-2 text-sm">
                   <li>
                     <a
                       href="#"
-                      className="text-gray-400 hover:text-white transition font-medium"
+                      className="text-muted-foreground hover:text-white transition font-medium"
                     >
                       Companies
                     </a>
@@ -37,7 +39,7 @@ export default function Footer() {
                   <li>
                     <a
                       href="#"
-                      className="text-gray-400 hover:text-white transition font-medium"
+                      className="text-muted-foreground hover:text-white transition font-medium"
                     >
                       Pricing
                     </a>
@@ -45,7 +47,7 @@ export default function Footer() {
                   <li>
                     <a
                       href="#"
-                      className="text-gray-400 hover:text-white transition font-medium"
+                      className="text-muted-foreground hover:text-white transition font-medium"
                     >
                       Terms
                     </a>
@@ -53,7 +55,7 @@ export default function Footer() {
                   <li>
                     <a
                       href="#"
-                      className="text-gray-400 hover:text-white transition font-medium"
+                      className="text-muted-foreground hover:text-white transition font-medium"
                     >
                       Advice
                     </a>
@@ -61,7 +63,7 @@ export default function Footer() {
                   <li>
                     <a
                       href="#"
-                      className="text-gray-400 hover:text-white transition font-medium"
+                      className="text-muted-foreground hover:text-white transition font-medium"
                     >
                       Privacy Policy
                     </a>
@@ -72,12 +74,14 @@ export default function Footer() {
             <div className="md:block hidden ">
               {/* Resources */}
               <div className="space-y-4">
-                <h4 className="font-bold text-white text-lg">Resources</h4>
+                <h4 className="font-bold text-primary-foreground  text-lg">
+                  Resources
+                </h4>
                 <ul className="space-y-2 text-sm">
                   <li>
                     <a
                       href="#"
-                      className="text-gray-400 hover:text-white transition font-medium"
+                      className="text-muted-foreground hover:text-white transition font-medium"
                     >
                       Help Docs
                     </a>
@@ -85,7 +89,7 @@ export default function Footer() {
                   <li>
                     <a
                       href="#"
-                      className="text-gray-400 hover:text-white transition font-medium"
+                      className="text-muted-foreground hover:text-white transition font-medium"
                     >
                       Guide
                     </a>
@@ -93,7 +97,7 @@ export default function Footer() {
                   <li>
                     <a
                       href="#"
-                      className="text-gray-400 hover:text-white transition font-medium"
+                      className="text-muted-foreground hover:text-white transition font-medium"
                     >
                       Updates
                     </a>
@@ -101,7 +105,7 @@ export default function Footer() {
                   <li>
                     <a
                       href="#"
-                      className="text-gray-400 hover:text-white transition font-medium"
+                      className="text-muted-foreground hover:text-white transition font-medium"
                     >
                       Contact Us
                     </a>
@@ -112,12 +116,14 @@ export default function Footer() {
             <div className="flex flex-wrap md:hidden justify-between ">
               <div className="flex items-center justify-between">
                 <div className="space-y-4">
-                  <h4 className="font-bold text-white text-lg">About</h4>
+                  <h4 className="font-bold text-primary-foreground  text-lg">
+                    About
+                  </h4>
                   <ul className="space-y-2 text-sm">
                     <li>
                       <a
                         href="#"
-                        className="text-gray-400 hover:text-white transition font-medium"
+                        className="text-muted-foreground hover:text-white transition font-medium"
                       >
                         Companies
                       </a>
@@ -125,7 +131,7 @@ export default function Footer() {
                     <li>
                       <a
                         href="#"
-                        className="text-gray-400 hover:text-white transition font-medium"
+                        className="text-muted-foreground hover:text-white transition font-medium"
                       >
                         Pricing
                       </a>
@@ -133,7 +139,7 @@ export default function Footer() {
                     <li>
                       <a
                         href="#"
-                        className="text-gray-400 hover:text-white transition font-medium"
+                        className="text-muted-foreground hover:text-white transition font-medium"
                       >
                         Terms
                       </a>
@@ -141,7 +147,7 @@ export default function Footer() {
                     <li>
                       <a
                         href="#"
-                        className="text-gray-400 hover:text-white transition font-medium"
+                        className="text-muted-foreground hover:text-white transition font-medium"
                       >
                         Advice
                       </a>
@@ -149,7 +155,7 @@ export default function Footer() {
                     <li>
                       <a
                         href="#"
-                        className="text-gray-400 hover:text-white transition font-medium"
+                        className="text-muted-foreground hover:text-white transition font-medium"
                       >
                         Privacy Policy
                       </a>
@@ -165,7 +171,7 @@ export default function Footer() {
                     <li>
                       <a
                         href="#"
-                        className="text-gray-400 hover:text-white transition font-medium"
+                        className="text-muted-foreground hover:text-white transition font-medium"
                       >
                         Help Docs
                       </a>
@@ -173,7 +179,7 @@ export default function Footer() {
                     <li>
                       <a
                         href="#"
-                        className="text-gray-400 hover:text-white transition font-medium"
+                        className="text-muted-foreground hover:text-white transition font-medium"
                       >
                         Guide
                       </a>
@@ -181,7 +187,7 @@ export default function Footer() {
                     <li>
                       <a
                         href="#"
-                        className="text-gray-400 hover:text-white transition font-medium"
+                        className="text-muted-foreground hover:text-white transition font-medium"
                       >
                         Updates
                       </a>
@@ -189,7 +195,7 @@ export default function Footer() {
                     <li>
                       <a
                         href="#"
-                        className="text-gray-400 hover:text-white transition font-medium"
+                        className="text-muted-foreground hover:text-white transition font-medium"
                       >
                         Contact Us
                       </a>
@@ -200,19 +206,19 @@ export default function Footer() {
             </div>
             {/* Newsletter */}
             <div className="space-y-4">
-              <h4 className="font-bold text-white text-lg">
+              <h4 className="font-bold text-primary-foreground text-lg">
                 Get job notification{" "}
               </h4>
-              <p className="text-sm text-gray-400 font-medium leading-relaxed">
+              <p className="text-sm text-muted-foreground font-medium leading-relaxed">
                 The latest job news, articles, sent to your inbox weekly.
               </p>
               <div className="flex flex-wrap md:flex-nowrap  gap-2">
                 <input
                   type="email"
                   placeholder="Email Address"
-                  className="flex-1 bg-white border border-gray-700 px-5 py-3 text-sm text-gray-700 placeholder-gray-500 focus:outline-none focus:border-purple-500 font-medium"
+                  className="flex-1 bg-primary-foreground  border border-gray-700 px-5 py-3 text-sm text-gray-700 placeholder-gray-500 focus:outline-none focus:border-purple-500 font-medium"
                 />
-                <Button className="bg-[#4640DE] w-full md:w-28 hover:bg-purple-700 text-white px-5 h-14 py-3 rounded-none  font-bold text-sm">
+                <Button className="bg-primary w-full md:w-28 hover:bg-purple-700 text-primary-foreground  px-5 h-14 py-3 rounded-none  font-bold text-sm">
                   Subscribe
                 </Button>
               </div>
@@ -222,31 +228,31 @@ export default function Footer() {
           {/* Divider */}
           <div className="border-t border-gray-800 py-8">
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-              <p className="text-xs text-gray-400 font-medium">
+              <p className="text-xs text-muted-foreground font-medium">
                 © 2024 QuickHire. All rights reserved.
               </p>
               <div className="flex items-center gap-4">
                 <a
                   href="#"
-                  className="text-gray-400 hover:text-white transition"
+                  className="text-muted-foreground hover:text-white transition"
                 >
                   <Facebook className="w-5 h-5" />
                 </a>
                 <a
                   href="#"
-                  className="text-gray-400 hover:text-white transition"
+                  className="text-muted-foreground hover:text-white transition"
                 >
                   <Twitter className="w-5 h-5" />
                 </a>
                 <a
                   href="#"
-                  className="text-gray-400 hover:text-white transition"
+                  className="text-muted-foreground hover:text-white transition"
                 >
                   <Linkedin className="w-5 h-5" />
                 </a>
                 <a
                   href="#"
-                  className="text-gray-400 hover:text-white transition"
+                  className="text-muted-foreground hover:text-white transition"
                 >
                   <Instagram className="w-5 h-5" />
                 </a>

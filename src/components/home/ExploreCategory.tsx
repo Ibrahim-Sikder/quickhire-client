@@ -39,7 +39,7 @@ export default async function ExploreCategory() {
         {/* Header */}
         <div className="flex justify-between items-center mb-12">
           <h2 className="text-2xl md:text-4xl font-bold">
-            Explore by <span className="text-blue-500">category</span>
+            Explore by <span className="text-accent">category</span>
           </h2>
 
           <Link
@@ -145,12 +145,14 @@ export default async function ExploreCategory() {
 
                           {/* TEXT */}
                           <div>
-                            <h3 className="font-bold text-base">
+                            <h3 className="font-bold  text-base md:text-lg text-muted">
                               {category.name}
                             </h3>
                             <p
                               className={`text-sm ${
-                                isActive ? "text-white/80" : "text-gray-600"
+                                isActive
+                                  ? "text-white/80"
+                                  : "text-muted-foreground"
                               }`}
                             >
                               {category.count} jobs available

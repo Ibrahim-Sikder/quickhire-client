@@ -58,13 +58,13 @@ const CategorySelect = ({ value, onChange, disabled }: any) => {
           value={customCategory}
           onChange={(e) => setCustomCategory(e.target.value)}
           autoFocus
-          className="border-gray-200 focus:border-[#4640de] focus:ring-[#4640de]/20"
+          className="border-gray-200 focus:border-primary focus:ring-primary/20"
         />
         <Button
           type="button"
           onClick={handleAddCustomCategory}
           size="sm"
-          className="bg-[#4640de] hover:bg-[#4640de]/90 text-white"
+          className="bg-primary hover:bg-primary/90 text-white"
         >
           Add
         </Button>
@@ -73,7 +73,7 @@ const CategorySelect = ({ value, onChange, disabled }: any) => {
           onClick={() => setIsAddingCustom(false)}
           size="sm"
           variant="outline"
-          className="border-gray-200 hover:bg-[#26A4FF]/10"
+          className="border-gray-200 hover:bg-accent/10"
         >
           Cancel
         </Button>
@@ -83,7 +83,7 @@ const CategorySelect = ({ value, onChange, disabled }: any) => {
 
   return (
     <Select value={value} onValueChange={onChange} disabled={disabled}>
-      <SelectTrigger className="border-gray-200 focus:ring-[#4640de]/20">
+      <SelectTrigger className="border-gray-200 focus:ring-primary/20">
         <SelectValue placeholder="Select category" />
       </SelectTrigger>
       <SelectContent>
@@ -91,7 +91,7 @@ const CategorySelect = ({ value, onChange, disabled }: any) => {
           <SelectItem
             key={cat}
             value={cat}
-            className="cursor-pointer hover:bg-[#26A4FF]/10"
+            className="cursor-pointer hover:bg-accent/10"
           >
             {cat}
           </SelectItem>
@@ -99,7 +99,7 @@ const CategorySelect = ({ value, onChange, disabled }: any) => {
         <Button
           type="button"
           variant="ghost"
-          className="w-full mt-2 text-[#4640de] hover:bg-[#26A4FF]/10"
+          className="w-full mt-2 text-primary hover:bg-accent/10"
           onClick={() => setIsAddingCustom(true)}
         >
           <Plus className="h-4 w-4 mr-2" />
@@ -254,7 +254,7 @@ export default function JobAddModal({
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Information */}
         <div className="space-y-4">
-          <h3 className="font-medium text-[#4640de]">Basic Information</h3>
+          <h3 className="font-medium text-primary">Basic Information</h3>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -270,7 +270,7 @@ export default function JobAddModal({
                   onChange={(e) =>
                     setFormData({ ...formData, title: e.target.value })
                   }
-                  className="pl-10 border-gray-200 focus:border-[#4640de] focus:ring-[#4640de]/20"
+                  className="pl-10 border-gray-200 focus:border-primary focus:ring-primary/20"
                   disabled={isSubmitting}
                 />
               </div>
@@ -289,7 +289,7 @@ export default function JobAddModal({
                   onChange={(e) =>
                     setFormData({ ...formData, company: e.target.value })
                   }
-                  className="pl-10 border-gray-200 focus:border-[#4640de] focus:ring-[#4640de]/20"
+                  className="pl-10 border-gray-200 focus:border-primary focus:ring-primary/20"
                   disabled={isSubmitting}
                 />
               </div>
@@ -310,7 +310,7 @@ export default function JobAddModal({
                   onChange={(e) =>
                     setFormData({ ...formData, location: e.target.value })
                   }
-                  className="pl-10 border-gray-200 focus:border-[#4640de] focus:ring-[#4640de]/20"
+                  className="pl-10 border-gray-200 focus:border-primary focus:ring-primary/20"
                   disabled={isSubmitting}
                 />
               </div>
@@ -333,7 +333,7 @@ export default function JobAddModal({
 
         {/* Description */}
         <div className="space-y-4">
-          <h3 className="font-medium text-[#4640de]">Job Description *</h3>
+          <h3 className="font-medium text-primary">Job Description *</h3>
           <RichTextEditor
             value={formData.description}
             onChange={(value) =>
@@ -344,7 +344,7 @@ export default function JobAddModal({
 
         {/* Tags */}
         <div className="space-y-4">
-          <h3 className="font-medium text-[#4640de]">Tags</h3>
+          <h3 className="font-medium text-primary">Tags</h3>
 
           <div className="flex gap-2">
             <div className="relative flex-1">
@@ -359,7 +359,7 @@ export default function JobAddModal({
                     handleAddTag();
                   }
                 }}
-                className="pl-10 border-gray-200 focus:border-[#4640de] focus:ring-[#4640de]/20"
+                className="pl-10 border-gray-200 focus:border-primary focus:ring-primary/20"
                 disabled={isSubmitting}
               />
             </div>
@@ -378,7 +378,7 @@ export default function JobAddModal({
               <Badge
                 key={tag}
                 variant="secondary"
-                className="px-3 py-1 bg-[#4640de] text-white hover:bg-[#4640de]/90"
+                className="px-3 py-1 bg-primary text-white hover:bg-primary/90"
               >
                 {tag}
                 <button
@@ -398,12 +398,12 @@ export default function JobAddModal({
 
         {/* Settings */}
         <div className="space-y-4">
-          <h3 className="font-medium text-[#4640de]">Settings</h3>
+          <h3 className="font-medium text-primary">Settings</h3>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
               <div className="flex items-center gap-2">
-                <Star className="h-4 w-4 text-[#4640de]" />
+                <Star className="h-4 w-4 text-primary" />
                 <span className="text-sm font-medium text-gray-700">
                   Featured Job
                 </span>
@@ -414,7 +414,7 @@ export default function JobAddModal({
                   setFormData({ ...formData, featured: checked })
                 }
                 disabled={isSubmitting}
-                className="data-[state=checked]:bg-[#4640de]"
+                className="data-[state=checked]:bg-primary"
               />
             </div>
 

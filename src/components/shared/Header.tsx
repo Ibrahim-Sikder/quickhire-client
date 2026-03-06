@@ -40,11 +40,11 @@ export default function Header() {
         <div className="hidden md:flex items-center gap-3">
           <Button
             variant="ghost"
-            className="text-sm font-semibold text-[#4640DE] hover:text-gray-900 hover:bg-transparent"
+            className="text-sm font-semibold text-primary hover:text-gray-900 hover:bg-transparent"
           >
             Login
           </Button>
-          <Button className="text-sm font-semibold bg-[#4640DE] text-white hover:bg-white hover:text-[#4640DE] cursor-pointer px-6 py-5">
+          <Button className="text-sm font-semibold bg-primary text-white hover:bg-white hover:text-primary cursor-pointer px-6 py-6 rounded-none">
             Sign Up
           </Button>
         </div>
@@ -80,11 +80,11 @@ export default function Header() {
             <div className="flex flex-col gap-3 w-full pt-4 border-t border-gray-200">
               <Button
                 variant="ghost"
-                className="text-sm font-semibold text-[#4640DE] hover:text-gray-900 hover:bg-transparent w-full justify-start"
+                className="text-sm font-semibold text-primary hover:text-gray-900 hover:bg-transparent w-full justify-start"
               >
                 Login
               </Button>
-              <Button className="text-sm font-semibold bg-[#4640DE] text-white hover:bg-white hover:text-[#4640DE] cursor-pointer w-full">
+              <Button className="text-sm font-semibold bg-primary text-white hover:bg-white hover:text-primary cursor-pointer w-full">
                 Sign Up
               </Button>
             </div>

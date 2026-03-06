@@ -222,7 +222,7 @@ export default function JobApply({ job, isOpen, onClose }: JobApplyProps) {
           <p className="text-slate-600">We'll notify you of any updates.</p>
           <Button
             onClick={handleClose}
-            className="mt-4 bg-[#4640de] hover:bg-[#4640de]/90 text-white"
+            className="mt-4 bg-primary hover:bg-primary/90 text-white"
           >
             Close
           </Button>

@@ -32,14 +32,14 @@ export default async function Page({
                 className="w-[500px]"
                 alt="hero"
               />
-              <p className="mt-3 text-[#515B6F] text-md leading-relaxed max-w-md font-medium">
+              <p className="mt-3 text-muted-foreground text-lg leading-relaxed max-w-md font-medium">
                 Great platform for the job seeker that searching for new
                 opportunities in the tech industry.
               </p>
             </div>
             <JobSearch initialJobs={jobs} searchParams={searchParams} />
             {/* Popular Tags */}
-            <div className="flex gap-2 flex-wrap text-[#202430] text-sm ">
+            <div className="flex gap-2 flex-wrap text-muted-foreground text-sm ">
               Popular : UI Designer, UX Researcher, Android, Admin
             </div>
           </div>

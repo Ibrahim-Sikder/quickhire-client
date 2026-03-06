@@ -16,7 +16,7 @@ export default function TrustedCompanies() {
   return (
     <Container>
       <section className="bg-white py-8 md:py-14 border-gray-200">
-        <p className="text-[#202430] text-sm mb-6 ">Companies we help grow.</p>
+        <p className="text-[#7C8493] text-sm mb-6 ">Companies we help grow.</p>
 
         <div className="flex flex-wrap items-center  sm:justify-between gap-6">
           {companies.map((c, i) => (

@@ -14,7 +14,7 @@ export default async function LatestJobsOpen() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8 md:mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900">
-            Latest <span className="text-blue-500">jobs open</span>
+            Latest <span className="text-accent">Jobs Open</span>
           </h2>
 
           <Link
@@ -31,7 +31,7 @@ export default async function LatestJobsOpen() {
           <p className="text-center text-slate-500 py-12">No jobs available.</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-            {jobs.map((job) => (
+            {jobs.slice(0, 8).map((job) => (
               <Link href={`/jobs/${job._id}`} key={job._id} className="block">
                 <JobCard job={job} />
               </Link>

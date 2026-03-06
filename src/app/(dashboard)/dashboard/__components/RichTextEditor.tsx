@@ -22,7 +22,7 @@ const MenuButton = ({ onClick, isActive, icon: Icon, title }: any) => (
     type="button"
     onClick={onClick}
     className={`p-2 rounded-md transition-colors ${
-      isActive ? "bg-[#4640de] text-white" : "hover:bg-gray-100 text-gray-700"
+      isActive ? "bg-primary text-white" : "hover:bg-gray-100 text-gray-700"
     }`}
     title={title}
   >

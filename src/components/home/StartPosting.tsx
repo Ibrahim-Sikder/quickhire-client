@@ -30,7 +30,7 @@ export default function StartPosting() {
                 Start posting jobs for only $10.
               </p>
 
-              <Button className="bg-white w-full md:w-auto text-indigo-600 hover:bg-gray-100 font-semibold px-8 py-6 rounded-lg text-base">
+              <Button className="bg-white w-full md:w-auto text-primary hover:bg-gray-100 font-semibold px-8 py-6 rounded-lg text-base">
                 Sign Up For Free
               </Button>
             </div>
